@@ -1,0 +1,394 @@
+/* ============================================================
+   NotificationDrawer.css
+   Pattern: same as ProfileDrawer — custom body inside DrawerRsuite
+   ============================================================ */
+
+/* ── RSuite body padding reset (same as profile-drawer) ──────── */
+.notification-drawer-body {
+    padding: 0 !important;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ── Root flex container (fills drawer body) ─────────────────── */
+.nd-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: #f4f5fa;
+}
+
+/* ============================================================
+   DARK HEADER
+   ============================================================ */
+.nd-header {
+    background: linear-gradient(135deg, #1a1d2e 0%, #252a3d 100%);
+    padding: 20px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+/* Row 1 — title + badge + close */
+.nd-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nd-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nd-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+.nd-count-badge {
+    background: var(--primary-500, #6366f1);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nd-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.65);
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.nd-close-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+/* Row 2 — All / Unread / Read */
+.nd-filter-row {
+    display: flex;
+    gap: 6px;
+}
+
+.nd-filter-btn {
+    padding: 5px 16px;
+    border-radius: 20px;
+    border: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.01em;
+}
+
+.nd-filter-btn--active {
+    background: var(--primary-500, #6366f1);
+    color: #fff;
+}
+
+.nd-filter-btn--inactive {
+    background: rgba(255, 255, 255, 0.10);
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.nd-filter-btn--inactive:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+}
+
+/* Row 3 — Search */
+.nd-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nd-search-icon {
+    position: absolute;
+    left: 12px;
+    color: rgba(255, 255, 255, 0.35);
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.nd-search-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 14px 0 36px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.18s ease;
+}
+
+.nd-search-input::placeholder { color: rgba(255, 255, 255, 0.28); }
+.nd-search-input:focus         { border-color: rgba(99, 102, 241, 0.7); }
+
+/* ============================================================
+   LIGHT BODY — scrollable notification list
+   ============================================================ */
+.nd-body {
+    flex: 1;
+    overflow-y: auto;
+    background: #f4f5fa;
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
+}
+
+.nd-body::-webkit-scrollbar       { width: 4px; }
+.nd-body::-webkit-scrollbar-track { background: transparent; }
+.nd-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+/* Date group label */
+.nd-date-label {
+    padding: 12px 18px 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    background: #f4f5fa;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Notification item */
+.nd-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    border-bottom: 1px solid #f0f2f7;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.nd-item:last-child  { border-bottom: none; }
+.nd-item:hover       { background: #fafbff; }
+
+/* Unread — light blue bg + left purple border */
+.nd-item--unread {
+    background: #eef0ff;
+    border-left: 3px solid var(--primary-500, #6366f1);
+}
+
+.nd-item--unread:hover { background: #e8eaff; }
+
+/* Avatar */
+.nd-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    margin-top: 1px;
+}
+
+.nd-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.nd-role-badge {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    font-size: 8px;
+    font-weight: 800;
+    color: var(--primary-500, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Content */
+.nd-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nd-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.nd-desc {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.nd-desc strong { font-weight: 700; }
+
+.nd-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.nd-time {
+    font-size: 11.5px;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+/* Check button */
+.nd-check-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #d1d5db;
+    flex-shrink: 0;
+    margin-top: 4px;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.nd-check-btn:hover {
+    border-color: var(--primary-400, #818cf8);
+    color: var(--primary-500, #6366f1);
+    background: var(--primary-100, #eef2ff);
+}
+
+.nd-check-btn--done {
+    border-color: #bbf7d0 !important;
+    background: #f0fdf4 !important;
+    color: #22c55e !important;
+    cursor: default;
+}
+
+/* Empty state */
+.nd-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 64px 20px;
+    color: #9ca3af;
+    font-size: 14px;
+    text-align: center;
+}
+
+.nd-empty-icon { font-size: 40px; opacity: 0.5; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.nd-footer {
+    padding: 12px 18px;
+    border-top: 1px solid #e8eaf0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.nd-markall-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px 10px;
+    border-radius: 7px;
+    transition: all 0.15s ease;
+}
+
+.nd-markall-btn:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+/* ── Action buttons group (check + open) ────────────────────── */
+.nd-action-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+    align-items: center;
+    margin-top: 4px;
+}
+
+.nd-open-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #d1d5db;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.nd-open-btn:hover {
+    border-color: var(--primary-400, #818cf8);
+    color: var(--primary-500, #6366f1);
+    background: var(--primary-100, #eef2ff);
+}

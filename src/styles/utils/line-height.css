@@ -1,0 +1,37 @@
+:root {
+    /* ── Line Height ── */
+    --line-height-none: 1;
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+}
+
+/* Line Height Start */
+
+.lh-none {
+    line-height: var(--line-height-none) !important;
+}
+
+.lh-tight {
+    line-height: var(--line-height-tight) !important;
+}
+
+.lh-snug {
+    line-height: var(--line-height-snug) !important;
+}
+
+.lh-normal {
+    line-height: var(--line-height-normal) !important;
+}
+
+.lh-relaxed {
+    line-height: var(--line-height-relaxed) !important;
+}
+
+.lh-loose {
+    line-height: var(--line-height-loose) !important;
+}
+
+/* Line Height End */

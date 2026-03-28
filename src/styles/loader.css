@@ -1,0 +1,14 @@
+.loader-scene {
+    position: relative;
+    width: 320px;
+    height: 280px;
+}
+
+.loader-tile {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 13px;
+    transform: rotate(45deg);
+    will-change: left, top;
+}

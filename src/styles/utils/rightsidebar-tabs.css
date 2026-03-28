@@ -1,0 +1,140 @@
+/* Line tabs - no scroll, structure: tabs_square > line_tabs_list > line_tabs_items > tabs_links */
+.tabs_square.line_tabs {
+  overflow: visible;
+}
+
+.line_tabs_list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  border: none;
+  overflow: visible;
+}
+
+.line_tabs_items {
+  margin: 0;
+  padding: 0;
+}
+
+.tabs_links {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  background: none;
+  font: inherit;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tabs_links:hover {
+  color: var(--primary, #3b82f6);
+}
+
+.tabs_links.active {
+  color: var(--primary, #3b82f6);
+  font-weight: 600;
+  border-bottom-color: var(--primary, #3b82f6);
+}
+
+/* Modal body: no scroll on whole body, only tab content scrolls. Tab > 1: margin-top 0; else rs-modal-body keeps 15px */
+.rightsidebar-modal-body {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  max-height: min(560px, 85vh);
+  margin-top: 0 !important;
+}
+
+.rightsidebar-modal-body-single-tab {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  max-height: min(560px, 85vh);
+  margin-top: 15px !important;
+}
+
+.rightsidebar-modal-body form.rightsidebar-form-with-tabs,
+.rightsidebar-modal-body-single-tab form.rightsidebar-form-with-tabs {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.rightsidebar-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.rightsidebar-tab-content-scroll {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 0.25rem;
+  padding-right: 5px; /* Add some padding for the thin scrollbar */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ccc #f1f1f1; /* Firefox */
+}
+
+/* Custom scrollbar for Webkit browsers (Chrome, Safari, Edge) */
+.rightsidebar-tab-content-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rightsidebar-tab-content-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.rightsidebar-tab-content-scroll::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.rightsidebar-tab-content-scroll::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Red border for required fields with validation error (redirected tab) */
+.form-control.is-invalid,
+.validate-input.error input.form-control,
+.validate-input.error textarea.form-control {
+  border-color: #dc3545 !important;
+}
+
+.rs-picker-invalid .rs-picker-toggle,
+.rs-picker.rs-picker-invalid .rs-picker-toggle {
+  border-color: #dc3545 !important;
+}
+
+.form-control.is-invalid:focus, .was-validated .form-control:invalid:focus {
+  border-color: #dc3545 !important;
+  box-shadow: none !important;
+}
+
+.validate-input .label-form-control {
+  align-items: center;
+  color: #374151;
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 2px;
+  line-height: 145%;
+  margin-bottom: 5px;
+  width: auto;
+  z-index: 2;
+}

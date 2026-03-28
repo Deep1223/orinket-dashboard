@@ -1,0 +1,181 @@
+.text-14p {
+  font-size: 14px;
+}
+
+:root {
+  /* ── Font Size ── */
+  --font-size-6: 6px;
+  --font-size-8: 8px;
+  --font-size-10: 10px;
+  --font-size-12: 12px;
+  --font-size-14: 14px;
+  --font-size-16: 16px;
+  --font-size-18: 18px;
+  --font-size-20: 20px;
+  --font-size-22: 22px;
+  --font-size-24: 24px;
+  --font-size-26: 26px;
+  --font-size-28: 28px;
+  --font-size-30: 30px;
+  --font-size-32: 32px;
+  --font-size-34: 34px;
+  --font-size-36: 36px;
+  --font-size-38: 38px;
+  --font-size-40: 40px;
+  --font-size-42: 42px;
+  --font-size-44: 44px;
+  --font-size-46: 46px;
+  --font-size-48: 48px;
+  --font-size-50: 50px;
+  --font-size-52: 52px;
+  --font-size-54: 54px;
+  --font-size-56: 56px;
+  --font-size-58: 58px;
+  --font-size-60: 60px;
+  --font-size-62: 62px;
+  --font-size-64: 64px;
+  --font-size-66: 66px;
+  --font-size-68: 68px;
+  --font-size-70: 70px;
+  --font-size-72: 72px;
+}
+
+/* Font Size Start */
+
+.text-6 {
+  font-size: var(--font-size-6) !important;
+}
+
+.text-8 {
+  font-size: var(--font-size-8) !important;
+}
+
+.text-10 {
+  font-size: var(--font-size-10) !important;
+}
+
+.text-12 {
+  font-size: var(--font-size-12) !important;
+}
+
+.text-14 {
+  font-size: var(--font-size-14) !important;
+}
+
+.text-16 {
+  font-size: var(--font-size-16) !important;
+}
+
+.text-18 {
+  font-size: var(--font-size-18) !important;
+}
+
+.text-20 {
+  font-size: var(--font-size-20) !important;
+}
+
+.text-22 {
+  font-size: var(--font-size-22) !important;
+}
+
+.text-24 {
+  font-size: var(--font-size-24) !important;
+}
+
+.text-26 {
+  font-size: var(--font-size-26) !important;
+}
+
+.text-28 {
+  font-size: var(--font-size-28) !important;
+}
+
+.text-30 {
+  font-size: var(--font-size-30) !important;
+}
+
+.text-32 {
+  font-size: var(--font-size-32) !important;
+}
+
+.text-34 {
+  font-size: var(--font-size-34) !important;
+}
+
+.text-36 {
+  font-size: var(--font-size-36) !important;
+}
+
+.text-38 {
+  font-size: var(--font-size-38) !important;
+}
+
+.text-40 {
+  font-size: var(--font-size-40) !important;
+}
+
+.text-42 {
+  font-size: var(--font-size-42) !important;
+}
+
+.text-44 {
+  font-size: var(--font-size-44) !important;
+}
+
+.text-46 {
+  font-size: var(--font-size-46) !important;
+}
+
+.text-48 {
+  font-size: var(--font-size-48) !important;
+}
+
+.text-50 {
+  font-size: var(--font-size-50) !important;
+}
+
+.text-52 {
+  font-size: var(--font-size-52) !important;
+}
+
+.text-54 {
+  font-size: var(--font-size-54) !important;
+}
+
+.text-56 {
+  font-size: var(--font-size-56) !important;
+}
+
+.text-58 {
+  font-size: var(--font-size-58) !important;
+}
+
+.text-60 {
+  font-size: var(--font-size-60) !important;
+}
+
+.text-62 {
+  font-size: var(--font-size-62) !important;
+}
+
+.text-64 {
+  font-size: var(--font-size-64) !important;
+}
+
+.text-66 {
+  font-size: var(--font-size-66) !important;
+}
+
+.text-68 {
+  font-size: var(--font-size-68) !important;
+}
+
+.text-70 {
+  font-size: var(--font-size-70) !important;
+}
+
+.text-72 {
+  font-size: var(--font-size-72) !important;
+}
+
+/* Font Size End */

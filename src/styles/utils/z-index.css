@@ -1,0 +1,72 @@
+:root {
+    /* ── Z-Index ── */
+    --z-index-0: 0;
+    --z-index-10: 10;
+    --z-index-20: 20;
+    --z-index-30: 30;
+    --z-index-40: 40;
+    --z-index-50: 50;
+    --z-index-auto: auto;
+    --z-index-dropdown: 1000;
+    --z-index-sticky: 1020;
+    --z-index-fixed: 1030;
+    --z-index-modal: 1040;
+    --z-index-popover: 1050;
+    --z-index-tooltip: 1060;
+}
+
+/* Z-Index Start */
+
+.z-0 {
+    z-index: var(--z-index-0) !important;
+}
+
+.z-10 {
+    z-index: var(--z-index-10) !important;
+}
+
+.z-20 {
+    z-index: var(--z-index-20) !important;
+}
+
+.z-30 {
+    z-index: var(--z-index-30) !important;
+}
+
+.z-40 {
+    z-index: var(--z-index-40) !important;
+}
+
+.z-50 {
+    z-index: var(--z-index-50) !important;
+}
+
+.z-auto {
+    z-index: var(--z-index-auto) !important;
+}
+
+.z-dropdown {
+    z-index: var(--z-index-dropdown) !important;
+}
+
+.z-sticky {
+    z-index: var(--z-index-sticky) !important;
+}
+
+.z-fixed {
+    z-index: var(--z-index-fixed) !important;
+}
+
+.z-modal {
+    z-index: var(--z-index-modal) !important;
+}
+
+.z-popover {
+    z-index: var(--z-index-popover) !important;
+}
+
+.z-tooltip {
+    z-index: var(--z-index-tooltip) !important;
+}
+
+/* Z-Index End */

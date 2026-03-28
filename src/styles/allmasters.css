@@ -1,0 +1,273 @@
+/* src/styles/allmasters.css
+   All classnames prefixed with "am-" to avoid collisions */
+
+/* ── Page wrapper ── */
+.am-page {
+    padding: 0;
+    height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ── Static top section: title + search + tabs — scroll nahi hoga ── */
+.am-page-top {
+    flex-shrink: 0;
+    padding-bottom: 4px;
+}
+
+/* ── Scrollable wrapper — sirf cards scroll honge ── */
+.am-grid-wrapper {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    padding-bottom: 24px;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* ── Filter tabs ── */
+.am-tabs {
+    display: flex;
+    gap: 6px;
+    margin-top: 14px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.am-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 7px;
+    border: 1.5px solid #e2e8f0;
+    background: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.14s;
+}
+
+.am-tab:hover {
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.am-tab-active {
+    background: var(--am-tab-color, #334155);
+    border-color: var(--am-tab-color, #334155);
+    color: #ffffff !important;
+}
+
+.am-tab-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.6;
+}
+
+.am-tab-count {
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.22);
+    padding: 1px 5px;
+    border-radius: 99px;
+}
+
+.am-tab:not(.am-tab-active) .am-tab-count {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* ── Modules grid ── */
+.am-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+    width: 100%;
+}
+
+/* ── Module card ── */
+.am-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: am-fadeUp 0.28s both;
+}
+
+.am-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes am-fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card head */
+.am-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 14px 11px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.am-card-head-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.am-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.am-card-mod-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Card body */
+.am-card-body {
+    padding: 10px 12px 12px;
+}
+
+.am-masters-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+}
+
+/* Master button */
+.am-master-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    border: 1px solid #f1f5f9;
+    background: #f8fafc;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    min-width: 0;
+    transition: all 0.12s;
+}
+
+.am-master-btn:hover {
+    border-color: var(--am-item-border);
+    background: var(--am-item-bg);
+}
+
+.am-master-btn:hover .am-master-lbl {
+    color: var(--am-item-color);
+}
+
+.am-master-btn:hover .am-master-arrow {
+    opacity: 1;
+    transform: translateX(1px);
+    stroke: var(--am-item-color);
+}
+
+.am-master-lbl {
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.12s;
+    flex: 1;
+    min-width: 0;
+}
+
+.am-master-arrow {
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+    opacity: 0;
+    stroke: #94a3b8;
+    transition: opacity 0.12s, transform 0.12s, stroke 0.12s;
+}
+
+/* ── Highlight ── */
+.am-highlight {
+    background: #fef08a;
+    border-radius: 2px;
+    padding: 0 1px;
+    font-style: normal;
+}
+
+/* ── Empty state ── */
+.am-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+.am-empty-icon {
+    font-size: 42px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.am-empty p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .am-page {
+        height: calc(100vh - 80px);
+    }
+    .am-grid { grid-template-columns: 1fr; }
+    .am-masters-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Custom Scrollbar Styling ── */
+.am-grid-wrapper::-webkit-scrollbar {
+    width: 10px;
+}
+
+.am-grid-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 999px;
+    margin: 8px 0;
+}
+
+.am-grid-wrapper::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+    border-radius: 999px;
+    border: 2px solid #f1f5f9;
+    transition: all 0.2s ease;
+}
+
+.am-grid-wrapper::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+    border-color: #e2e8f0;
+}
+
+.am-grid-wrapper::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(180deg, #64748b 0%, #475569 100%);
+}

@@ -1,0 +1,107 @@
+const CityMasterJson = [
+  {
+    tabname: 'City Master',
+    pagename: 'City Master',
+    aliasname: 'citymaster',
+    rightsidebarsize: 'sm',
+    fields: [
+      {
+        field: 'countryid',
+        text: 'Country',
+        type: 'dropdown',
+        disabled: false,
+        required: true,
+        defaultvisibility: true,
+        size: 'col-12',
+        defaultvalue: '',
+        masterdata: 'countrymaster',
+        masterdatafield: 'countryname',
+        formdatafield: 'country',
+        cleanable: true,
+        searchable: true,
+        staticfilter: { status: 1 },
+        onchangefill: ['stateid'],
+        onchangedata: ['stateid'],
+        projection: {
+          countryname: 1,
+          _id: 1,
+        },
+
+        showingrid: true,
+        sorting: true,
+        tablesize: 'tbl-w-250p',
+
+        filter: 1,
+        filtertype: 'text',
+        label: 'Country',
+      },
+      {
+        field: 'stateid',
+        text: 'State',
+        type: 'dropdown',
+        disabled: false,
+        required: true,
+        defaultvisibility: true,
+        size: 'col-12',
+        defaultvalue: '',
+        masterdata: 'statemaster',
+        masterdatafield: 'statename',
+        formdatafield: 'state',
+        cleanable: true,
+        searchable: true,
+        // dependentfilter: { countryid: 'countryid' },
+        statefilter: { status: 1 },
+        dependentfilter: { countryid: 'countryid' },
+        projection: {
+          statename: 1,
+          _id: 1,
+        },
+
+        showingrid: true,
+        sorting: true,
+        tablesize: 'tbl-w-250p',
+
+        filter: 1,
+        filtertype: 'text',
+        label: 'state',
+      },
+      {
+        field: 'cityname',
+        text: 'City Name',
+        type: 'text',
+        disabled: false,
+        required: true,
+        defaultvisibility: true,
+        size: 'col-12',
+        defaultvalue: '',
+
+        showingrid: true,
+        sorting: true,
+        tablesize: 'tbl-w-250p',
+
+        filter: 1,
+        filtertype: 'text',
+        label: 'City',
+      },
+      {
+        field: 'status',
+        text: 'Status',
+        type: 'checkbox',
+        disabled: false,
+        required: false,
+        defaultvisibility: true,
+        size: 'col-12',
+        placeholder: 'Select Status',
+        defaultvalue: 1,
+
+        showingrid: true,
+        sorting: false,
+        tablesize: 'tbl-w-250p',
+
+        filter: 0,
+      },
+    ],
+  },
+];
+
+export default CityMasterJson;

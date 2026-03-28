@@ -1,0 +1,262 @@
+/* ============================================================
+   NotificationInfoBox.css — image-matched notification UI
+   ============================================================ */
+
+/* ── Filter tabs (All / Unread) ──────────────────────────────── */
+.notif-ib-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+.notif-ib-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notif-ib-filter-wrap {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.notif-ib-filter-btn {
+    padding: 4px 12px;
+    border-radius: var(--border-radius-6p, 6px);
+    border: none;
+    font-size: 12px;
+    font-weight: var(--font-weight-600, 600);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.notif-ib-filter-btn--active {
+    background: var(--primary-500, #6366f1);
+    color: #fff;
+}
+
+.notif-ib-filter-btn--inactive {
+    background: var(--secondary-100, #f3f4f6);
+    color: var(--secondary-500, #6b7280);
+}
+
+.notif-ib-filter-btn--inactive:hover {
+    background: var(--secondary-200, #e5e7eb);
+}
+
+/* ── List container ──────────────────────────────────────────── */
+.notif-ib-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.notif-ib-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 20px;
+    color: var(--secondary-400, #9499a4);
+    font-size: var(--font-size-14, 14px);
+}
+
+/* ── Single notification row ─────────────────────────────────── */
+.notif-ib-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 12px 16px 12px 20px;
+    border-bottom: 1px solid var(--secondary-100, #f0f2f7);
+    position: relative;
+    background: #fff;
+    transition: background 0.12s ease;
+    cursor: pointer;
+}
+
+.notif-ib-item:last-child  { border-bottom: none; }
+.notif-ib-item:hover       { background: #fafbff; }
+.notif-ib-item--unread     { background: #f7f8ff; }
+.notif-ib-item--unread:hover { background: #f0f2ff; }
+
+/* Blue dot on left for unread */
+.notif-ib-unread-dot {
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: var(--border-radius-full, 9999px);
+    background: var(--primary-500, #6366f1);
+    flex-shrink: 0;
+}
+
+/* ── Avatar with initials + role badge ───────────────────────── */
+.notif-ib-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    margin-top: 2px;
+}
+
+.notif-ib-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-8p, 11px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: var(--font-weight-700, 700);
+    color: #fff;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+}
+
+.notif-ib-avatar--read {
+    background: linear-gradient(135deg, #d1d5db, #9ca3af) !important;
+}
+
+.notif-ib-role-badge {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--border-radius-4p, 4px);
+    background: #fff;
+    border: 1.5px solid var(--secondary-200, #e5e7eb);
+    font-size: 8px;
+    font-weight: var(--font-weight-800, 800);
+    color: var(--primary-500, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Content ─────────────────────────────────────────────────── */
+.notif-ib-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.notif-ib-text {
+    font-size: var(--font-size-13, 13px);
+    font-weight: var(--font-weight-400, 400);
+    color: #374151;
+    line-height: 1.5;
+    margin: 0;
+    word-break: break-word;
+}
+
+.notif-ib-text strong {
+    font-weight: var(--font-weight-700, 700);
+    color: #111827;
+}
+
+.notif-ib-text--read       { color: #9ca3af; }
+.notif-ib-text--read strong { color: #6b7280; }
+
+.notif-ib-meta {
+    font-size: 11px;
+    color: var(--secondary-400, #b0b4c0);
+    font-weight: var(--font-weight-500, 500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Action buttons ──────────────────────────────────────────── */
+.notif-ib-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.notif-ib-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--border-radius-6p, 7px);
+    border: 1px solid var(--secondary-200, #e5e7eb);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.notif-ib-action-btn:hover {
+    background: var(--primary-100, #eef2ff);
+    color: var(--primary-500, #6366f1);
+    border-color: #c7d2fe;
+}
+
+.notif-ib-action-btn--done {
+    background: #f0fdf4 !important;
+    color: #22c55e !important;
+    border-color: #bbf7d0 !important;
+    cursor: default;
+}
+
+/* ── Footer buttons ──────────────────────────────────────────── */
+.notif-ib-footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.notif-ib-markall-btn {
+    font-size: 12px;
+    font-weight: var(--font-weight-600, 600);
+    color: var(--secondary-500, #6b7280);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px 10px;
+    border-radius: var(--border-radius-6p, 7px);
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.notif-ib-markall-btn:hover {
+    background: var(--secondary-100, #f0f2f7);
+    color: #111827;
+}
+
+.notif-ib-showall-btn {
+    font-size: 12px;
+    font-weight: var(--font-weight-700, 700);
+    color: var(--primary-500, #6366f1);
+    background: var(--primary-100, #eef2ff);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-6p, 8px);
+    transition: all 0.18s ease;
+    white-space: nowrap;
+}
+
+.notif-ib-showall-btn:hover {
+    background: var(--primary-500, #6366f1);
+    color: #fff;
+}
