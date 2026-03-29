@@ -169,6 +169,12 @@ const Config = {
   followupdatelabel: 'Follow-up Date',
 
   // ==================== MESSAGES ====================
+  // CRUD Success/Error Messages
+  dataaddedsuccessfully: 'Data added successfully!',
+  dataupdated: 'Data updated successfully!',
+  datadeleted: 'Data deleted successfully!',
+  dataaddedfailed: 'Failed to add data. Please try again.',
+
   MESSAGES: {
     // General Error Messages
     fillAllFields: 'Please Fill All Required Fields',

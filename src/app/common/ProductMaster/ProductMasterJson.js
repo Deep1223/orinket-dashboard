@@ -24,6 +24,25 @@ const ProductMasterJson = [
                 label: 'Product Name',
             },
             {
+                field: 'productseries',
+                text: 'Product Series',
+                type: 'text',
+                disabled: true,
+                required: false,
+                defaultvisibility: true,
+                size: 'col-12',
+                placeholder: 'Loading next code… (final code fixed on Save)',
+                defaultvalue: '',
+
+                showingrid: true,
+                sorting: true,
+                tablesize: 'tbl-w-200p',
+
+                filter: 1,
+                filtertype: 'text',
+                label: 'Product Series',
+            },
+            {
                 field: 'price',
                 text: 'Price',
                 type: 'number',

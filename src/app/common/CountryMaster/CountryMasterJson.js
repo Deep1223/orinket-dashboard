@@ -42,6 +42,25 @@ const CountryMasterJson = [
         label: 'Country Code',
       },
       {
+        field: 'currencycode',
+        text: 'Currency Code',
+        type: 'text',
+        disabled: false,
+        required: true,
+        placeholder: 'e.g. INR, USD, EUR',
+        defaultvisibility: true,
+        size: 'col-12',
+        defaultvalue: '',
+
+        showingrid: true,
+        sorting: true,
+        tablesize: 'tbl-w-180p',
+
+        filter: 1,
+        filtertype: 'text',
+        label: 'Currency',
+      },
+      {
         field: 'status',
         text: 'Status',
         type: 'checkbox',

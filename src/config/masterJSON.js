@@ -12,6 +12,7 @@ import MenuAssignJson from '../app/common/MenuAssign/MenuAssignMasterJson';
 import SeriesAssignJson from '../app/common/SeriesAssignMaster/SeriesAssignMasterJson';
 import ProductMasterJson from '../app/common/ProductMaster/ProductMasterJson';
 import SubCategoryMasterJson from '../app/common/SubCategoryMaster/SubCategoryMasterJson';
+import GeneralSettingMasterJson from '../app/common/GeneralSetting/GeneralSettingMasterJson';
 
 const MasterJson = (type) => {
   switch (type) {
@@ -43,6 +44,8 @@ const MasterJson = (type) => {
       return ProductMasterJson;
     case 'subcategorymaster':
       return SubCategoryMasterJson;
+    case 'generalsetting':
+      return GeneralSettingMasterJson;
     default:
       return [];
   }

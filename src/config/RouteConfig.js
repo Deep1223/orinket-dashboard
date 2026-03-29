@@ -17,6 +17,7 @@ import MenuAssign from '../app/common/MenuAssign/MenuAssign';
 import SeriesAssignMaster from '../app/common/SeriesAssignMaster/SeriesAssignMaster';
 import ProductMaster from '../app/common/ProductMaster/ProductMaster';
 import SubCategoryMaster from '../app/common/SubCategoryMaster/SubCategoryMaster';
+import GeneralSetting from '../app/common/GeneralSetting/GeneralSetting';
 
 /* ── Auth routes (no layout) ── */
 export const AUTH_ROUTES = [
@@ -43,4 +44,5 @@ export const FLAT_ROUTES = [
     { path: '/statemaster', pageKey: 'statemaster', label: 'State Master', component: StateMaster },
     { path: '/productmaster', pageKey: 'productmaster', label: 'Product Master', component: ProductMaster },
     { path: '/subcategorymaster', pageKey: 'subcategorymaster', label: 'Sub Category Master', component: SubCategoryMaster },
+    { path: '/generalsetting', pageKey: 'generalsetting', label: 'General Settings', component: GeneralSetting },
 ];

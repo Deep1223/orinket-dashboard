@@ -29,6 +29,7 @@ const RightSidebar = (props) => {
   const rightSidebarFormData = useAppSelector((s) => s.rightsidebarformdata);
   const formData = useAppSelector((s) => s.formdata);
   const masterdata = useAppSelector((s) => s.masterdata); // Add masterdata selector
+  const masterdatalist = useAppSelector((s) => s.masterdatalist);
   const firstErrorTabIndex = useAppSelector((s) => s.firstErrorTabIndex);
   const hasMultipleTabs = rightSidebarFormData?.length > 1;
 
@@ -41,12 +42,13 @@ const RightSidebar = (props) => {
   };
 
 
+  const embedMode = props.embedMode === true;
+
   useEffect(() => {
-    if (modal?.rightsidebar) {
+    if (embedMode || modal?.rightsidebar) {
       setActiveTabIndex(0);
-      // localStorage image clearing removed - using backend
     }
-  }, [modal?.rightsidebar, formData._id]);
+  }, [embedMode, modal?.rightsidebar, formData._id]);
 
   useEffect(() => {
     if (hasMultipleTabs && firstErrorTabIndex != null) {
@@ -59,10 +61,89 @@ const RightSidebar = (props) => {
     ? `Create ${rightSidebarFormData[0].pagename}`
     : 'Create';
 
+  const pageHeading = rightSidebarFormData?.[0]?.pagename || 'Settings';
+
+  /** Shared tab / single-column form body (used by modal and embed pages). */
+  const renderMainFormContent = () =>
+    hasMultipleTabs ? (
+      <div className="rightsidebar-body-wrapper">
+        <div
+          className={`project-page-tabs col-12 flex-shrink-0 ${
+            hasMultipleTabs ? (embedMode ? 'pb-3 px-3 px-md-4 pt-3' : 'pb-1') : ''
+          }`}
+        >
+          {embedMode ? (
+            <div className="embed-tabs-pill" role="tablist" aria-label="Settings sections">
+              {rightSidebarFormData?.map((tab, tabindex) => (
+                <button
+                  key={`tab-${tabindex}-${tab.tabname}`}
+                  type="button"
+                  className={`embed-tab-pill ${activeTabIndex === tabindex ? 'active' : ''}`}
+                  role="tab"
+                  aria-controls={tab.tabname}
+                  aria-selected={activeTabIndex === tabindex}
+                  onClick={() => setActiveTabIndex(tabindex)}
+                >
+                  {tab.tabname}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="tabs_square line_tabs border-bottom">
+              <ul className="line_tabs_list" role="tablist">
+                {rightSidebarFormData?.map((tab, tabindex) => (
+                  <li key={`tab-${tabindex}-${tab.tabname}`} className="line_tabs_items">
+                    <button
+                      type="button"
+                      className={`tabs_links ${activeTabIndex === tabindex ? 'active' : ''}`}
+                      role="tab"
+                      aria-controls={tab.tabname}
+                      aria-selected={activeTabIndex === tabindex}
+                      onClick={() => setActiveTabIndex(tabindex)}
+                    >
+                      {tab.tabname}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+        <div
+          className={`tab-content overflowX-hidden rightsidebar-tab-content-scroll ${
+            embedMode ? 'embed-tab-panel pt-0' : ''
+          }`}
+        >
+          <div
+            className={`row ${embedMode ? 'gx-2 gx-lg-3 embed-form-row' : 'gx-3 gx-lg-4 embed-form-row'}`}
+          >
+            {renderFieldsWithSections(activeTabIndex, 'tab')}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className={`rightsidebar-tab-content-scroll ${embedMode ? 'embed-tab-panel' : ''}`}>
+        <div
+          className={`row ${embedMode ? 'gx-2 gx-lg-3 embed-form-row' : 'gx-3 gx-lg-4 embed-form-row'}`}
+        >
+          {renderFieldsWithSections(0, 'single')}
+        </div>
+      </div>
+    );
+
   const checkValidation = (field, value) => {
     const newRightSidebarFormData = IISMethods.createRightSidebarData(field, rightSidebarFormData);
     const fd = IISMethods.createFormData(field, value);
     JsCall.ValidateForm(fd, newRightSidebarFormData);
+  };
+
+  const isFieldVisible = (fields) => {
+    if (!fields.visibleWhen) return true;
+    const { field, notEquals, equals } = fields.visibleWhen;
+    const val = formData[field];
+    if (notEquals !== undefined) return String(val) !== String(notEquals);
+    if (equals !== undefined) return String(val) === String(equals);
+    return true;
   };
 
   const renderFieldByType = (fields) => {
@@ -797,14 +878,36 @@ const RightSidebar = (props) => {
                   tableData.map((row, rowIndex) => (
                     <tr key={rowIndex} className="align-middle">
                       {tableFields.map((tableField, i) => {
-                        const rawValue = row[tableField.field] || '-';
-                        const displayValue = tableField.type === 'file' ? (
-                          row[tableField.field]?.name || (typeof row[tableField.field] === 'string' ? row[tableField.field].split('/').pop() : '-') || '-'
-                        ) : rawValue;
+                        let rawValue = row[tableField.field];
+                        let displayValue;
+                        if (tableField.type === 'file') {
+                          displayValue =
+                            row[tableField.field]?.name ||
+                            (typeof row[tableField.field] === 'string'
+                              ? row[tableField.field].split('/').pop()
+                              : '-') ||
+                            '-';
+                        } else if (tableField.type === 'dropdown' && tableField.formdatafield) {
+                          const named = row[tableField.formdatafield];
+                          const mKey = tableField.storemasterdatabyfield ? tableField.field : tableField.masterdata;
+                          const item = IISMethods.getObjectfromArray(
+                            masterdatalist?.[mKey] || [],
+                            '_id',
+                            row[tableField.field]
+                          );
+                          displayValue =
+                            named ||
+                            item?.[tableField.masterdatafield] ||
+                            item?.categoryname ||
+                            (rawValue != null && rawValue !== '' ? String(rawValue) : '-');
+                          rawValue = displayValue;
+                        } else {
+                          displayValue = rawValue != null && rawValue !== '' ? rawValue : '-';
+                        }
 
                         return (
                           <td key={i} className={`text-14p py-2 px-3 ${tableField.rightsidebartablesize || 'tbl-w-100p'}`} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            <TextOverflowTitle title={rawValue}>
+                            <TextOverflowTitle title={String(displayValue)}>
                               {displayValue}
                             </TextOverflowTitle>
                           </td>
@@ -847,85 +950,100 @@ const RightSidebar = (props) => {
     return null;
   };
 
+  /** Renders fields in order; optional `sectionTitle` on a field starts a new group (title + border-bottom). */
+  const renderFieldsWithSections = (tabIndex, keyPrefix) => {
+    const tabFields = rightSidebarFormData?.[tabIndex]?.fields || [];
+    let prevSectionTitle = null;
+    const nodes = [];
+
+    tabFields.forEach((fields, index) => {
+      if (fields.istablefield) return;
+      if (!isFieldVisible(fields)) return;
+
+      const st = typeof fields.sectionTitle === 'string' ? fields.sectionTitle.trim() : '';
+      if (st) {
+        if (st !== prevSectionTitle) {
+          prevSectionTitle = st;
+          nodes.push(
+            <div key={`${keyPrefix}-section-${st}-${index}`} className="col-12">
+              <div
+                className={`rightsidebar-field-section-title border-bottom pb-2 mb-3 mt-2 ${
+                  embedMode ? 'rightsidebar-field-section-title--embed' : ''
+                }`}
+              >
+                <span className="fw-semibold text-dark text-14">{st}</span>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      nodes.push(
+        <div key={fields.field || `${keyPrefix}-f-${index}`} className={`${fields.size}`}>
+          {renderFieldByType(fields)}
+        </div>
+      );
+    });
+
+    return nodes;
+  };
+
   return (
     <>
-      <ModalRsuite
-        open={modal?.rightsidebar}
-        onClose={() => {
-          IISMethods.handleGrid(false, 'rightsidebar', 0);
-        }}
-        title={title}
-        size={rightSidebarFormData?.[0]?.rightsidebarsize}
-        bodyClassName={hasMultipleTabs ? 'rightsidebar-modal-body' : 'rightsidebar-modal-body-single-tab'}
-        body={
-          <form method="post" className="rightsidebar-form-with-tabs">
-            {hasMultipleTabs ? (
-              <div className="rightsidebar-body-wrapper">
-                <div className={`project-page-tabs col-12 flex-shrink-0 ${hasMultipleTabs ? 'pb-1' : ''}`}>
-                  <div className="tabs_square line_tabs border-bottom">
-                    <ul className="line_tabs_list" role="tablist">
-                      {rightSidebarFormData?.map((tab, tabindex) => (
-                        <li key={`tab-${tabindex}-${tab.tabname}`} className="line_tabs_items">
-                          <button
-                            type="button"
-                            className={`tabs_links ${activeTabIndex === tabindex ? 'active' : ''}`}
-                            role="tab"
-                            aria-controls={tab.tabname}
-                            aria-selected={activeTabIndex === tabindex}
-                            onClick={() => setActiveTabIndex(tabindex)}
-                          >
-                            {tab.tabname}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div className="tab-content overflowX-hidden rightsidebar-tab-content-scroll">
-                  <div className="row">
-                    {rightSidebarFormData?.[activeTabIndex]?.fields?.map((fields, index) => {
-                      if (fields.istablefield) return null;
-                      return (
-                        <div key={fields.field || index} className={`${fields.size}`}>
-                          {renderFieldByType(fields)}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="rightsidebar-tab-content-scroll">
-                <div className="row">
-                  {rightSidebarFormData?.[0]?.fields.map((fields, index) => {
-                    if (fields.istablefield) return null;
-                    return (
-                      <div key={fields.field || index} className={`${fields.size}`}>
-                        {renderFieldByType(fields)}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+      {embedMode ? (
+        <div className="rightsidebar-embed rightsidebar-embed-settings bg-white border rounded-3 shadow-sm">
+          <div className="rightsidebar-embed-header border-bottom px-3 px-md-4 py-3">
+            <h1 className="h4 fw-semibold text-dark mb-0">{pageHeading}</h1>
+          </div>
+          <form method="post" className="rightsidebar-form-with-tabs rightsidebar-embed-form">
+            {renderMainFormContent()}
           </form>
-        }
-        footer={
-          <div className="d-flex gap-10">
-            <button className="btn btn-primary" onClick={() => props.handleAddButtonClick(hasMultipleTabs ? activeTabIndex : undefined)}>
-              Save
-            </button>
+          <div className="rightsidebar-embed-actions d-flex gap-2 gap-md-3 justify-content-end align-items-center flex-wrap px-3 px-md-4 py-3">
+            {typeof props.onCancelEmbed === 'function' && (
+              <button type="button" className="btn btn-outline-secondary" onClick={props.onCancelEmbed}>
+                Cancel
+              </button>
+            )}
             <button
-              className="btn btn-secondary"
-              onClick={() => {
-                IISMethods.handleGrid(false, 'rightsidebar', 0);
-              }}
+              type="button"
+              className="btn btn-primary px-4"
+              onClick={() => props.handleAddButtonClick(null)}
             >
-              Cancel
+              Save changes
             </button>
           </div>
-        }
-      />
+        </div>
+      ) : (
+        <ModalRsuite
+          open={modal?.rightsidebar}
+          onClose={() => {
+            IISMethods.handleGrid(false, 'rightsidebar', 0);
+          }}
+          title={title}
+          size={rightSidebarFormData?.[0]?.rightsidebarsize}
+          bodyClassName={hasMultipleTabs ? 'rightsidebar-modal-body' : 'rightsidebar-modal-body-single-tab'}
+          body={
+            <form method="post" className="rightsidebar-form-with-tabs">
+              {renderMainFormContent()}
+            </form>
+          }
+          footer={
+            <div className="d-flex gap-10">
+              <button className="btn btn-primary" onClick={() => props.handleAddButtonClick(hasMultipleTabs ? activeTabIndex : undefined)}>
+                Save
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  IISMethods.handleGrid(false, 'rightsidebar', 0);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          }
+        />
+      )}
 
       <ModalRsuite
         open={getCurrentState().modal?.viewdetails}

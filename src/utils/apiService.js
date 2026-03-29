@@ -402,6 +402,32 @@ class ApiService {
       return { status: 500, success: false, message: error.message };
     }
   }
+
+  /** Next product series code for create form (read-only preview; server assigns on save). */
+  async previewNextProductSeries() {
+    try {
+      const url = `${this.baseUrl}/productmaster/preview-next-series`;
+      const response = await this.makeApiRequest(url, {
+        method: 'GET',
+      });
+      if (!response || response.success === false) {
+        return {
+          status: response?.status || 404,
+          success: false,
+          data: null,
+          message: response?.message || 'Could not load series preview',
+        }; 
+      }
+      return {
+        status: 200,
+        success: true,
+        data: response.data ?? null,
+        message: response.message,
+      };
+    } catch (error) {
+      return { status: 500, success: false, data: null, message: error.message };
+    }
+  }
 }
 
 const apiService = new ApiService();

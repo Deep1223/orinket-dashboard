@@ -275,6 +275,17 @@ const MasterController = () => {
       });
     }
 
+    if (!id && rightSidebarData?.[0]?.aliasname === 'productmaster') {
+      try {
+        const prev = await ApiService.previewNextProductSeries();
+        if (prev?.success && prev?.data?.productseries) {
+          formData.productseries = prev.data.productseries;
+        }
+      } catch (e) {
+        console.warn('Product series preview failed', e);
+      }
+    }
+
     // Clear form data first to prevent merge issues, then set new data
     store.dispatch(clearFormData());
     setProps({ formdata: formData });

@@ -3,6 +3,7 @@
 import React from 'react';
 import { FiEdit, FiPlus, FiEye } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { useAppSelector } from '../../store/hooks';
 import SelectPickerRsuite from '../SelectPickerRsuite';
 import TextOverflowTitle from '../TextOverflowTitle';
 import apiService from '../../utils/apiService';
@@ -10,6 +11,7 @@ import IISMethods from '../../utils/IISMethods';
 import JsCall from '../../utils/JsCall';
 
 const TableAddButtonField = (props) => {
+  const masterdatalist = useAppSelector((s) => s.masterdatalist);
   const tableData = props.formData[props.fields.field] || [];
   const tableFields = props.rightSidebarFormData?.[props.activeTabIndex]?.fields.filter(f => props.fields.tablefields.includes(f.field)) || [];
 
@@ -223,7 +225,7 @@ const TableAddButtonField = (props) => {
         </div>
         <button
           type="button"
-          className="btn btn-primary h-35p w-35p d-flex align-items-center justify-content-center mb-3"
+          className="btn btn-primary h-35p w-35p d-flex align-items-center justify-content-center mb-3 flex-shrink-0"
           onClick={handleAddRow}
         >
           {props.editIndex !== null ? <FiEdit className="text-16" /> : <FiPlus className="text-16" />}
@@ -247,14 +249,36 @@ const TableAddButtonField = (props) => {
               tableData.map((row, rowIndex) => (
                 <tr key={rowIndex} className="align-middle">
                   {tableFields.map((tableField, i) => {
-                    const rawValue = row[tableField.field] || '-';
-                    const displayValue = tableField.type === 'file' ? (
-                      row[tableField.field]?.name || (typeof row[tableField.field] === 'string' ? row[tableField.field].split('/').pop() : '-') || '-'
-                    ) : rawValue;
+                    let rawValue = row[tableField.field];
+                    let displayValue;
+                    if (tableField.type === 'file') {
+                      displayValue =
+                        row[tableField.field]?.name ||
+                        (typeof row[tableField.field] === 'string'
+                          ? row[tableField.field].split('/').pop()
+                          : '-') ||
+                        '-';
+                    } else if (tableField.type === 'dropdown' && tableField.formdatafield) {
+                      const named = row[tableField.formdatafield];
+                      const mKey = tableField.storemasterdatabyfield ? tableField.field : tableField.masterdata;
+                      const item = IISMethods.getObjectfromArray(
+                        masterdatalist?.[mKey] || [],
+                        '_id',
+                        row[tableField.field]
+                      );
+                      displayValue =
+                        named ||
+                        item?.[tableField.masterdatafield] ||
+                        item?.categoryname ||
+                        (rawValue != null && rawValue !== '' ? String(rawValue) : '-');
+                      rawValue = displayValue;
+                    } else {
+                      displayValue = rawValue != null && rawValue !== '' ? rawValue : '-';
+                    }
 
                     return (
                       <td key={i} className={`text-14p py-2 px-3 ${tableField.rightsidebartablesize || 'tbl-w-100p'}`} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        <TextOverflowTitle title={rawValue}>
+                        <TextOverflowTitle title={String(displayValue)}>
                           {displayValue}
                         </TextOverflowTitle>
                       </td>

@@ -109,6 +109,15 @@
   background: #aaa;
 }
 
+/* Grouped field sections (MasterJson `sectionTitle`) */
+.rightsidebar-field-section-title {
+  border-color: #dee2e6 !important;
+}
+
+.rightsidebar-field-section-title span {
+  line-height: 1.35;
+}
+
 /* Red border for required fields with validation error (redirected tab) */
 .form-control.is-invalid,
 .validate-input.error input.form-control,
@@ -137,4 +146,196 @@
   margin-bottom: 5px;
   width: auto;
   z-index: 2;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Full-page embed (e.g. General Settings): layout, pill tabs, sections       */
+/* -------------------------------------------------------------------------- */
+
+/*
+ * General Settings embed: only the form body (below title + tabs) scrolls.
+ * App header / card header / tabs / Save bar stay fixed — no scroll on the outer column.
+ */
+.general-setting-page {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.general-setting-page .general-setting-page-inner {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Host fills main; no outer scroll */
+.right-sidebar-settings-host {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.right-sidebar-settings-host > .rightsidebar-embed-settings {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.rightsidebar-embed-settings {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  border-color: #e8ecf0 !important;
+}
+
+.rightsidebar-embed-header {
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #fafbfc 0%, #ffffff 100%);
+}
+
+/* Form fills space between title and actions; inner panel scrolls */
+.rightsidebar-embed-settings .rightsidebar-embed-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.rightsidebar-embed-settings .rightsidebar-body-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Tab strip stays pinned above the scrolling body */
+.rightsidebar-embed-settings .rightsidebar-body-wrapper > .project-page-tabs {
+  flex-shrink: 0;
+}
+
+/* Scroll target: fields only (works for single-tab and multi-tab layouts) */
+.rightsidebar-embed-settings .embed-tab-panel.rightsidebar-tab-content-scroll {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Tighter right padding: vertical scrollbar still needs ~6–14px; extra padding looked like “empty” space */
+  padding: 1rem 0.5rem 1.5rem 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+@media (min-width: 768px) {
+  .rightsidebar-embed-settings .embed-tab-panel.rightsidebar-tab-content-scroll {
+    padding: 1.25rem 0.75rem 1.75rem 1.5rem;
+  }
+}
+
+.rightsidebar-embed-settings .embed-tab-panel.rightsidebar-tab-content-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rightsidebar-embed-settings .embed-tab-panel.rightsidebar-tab-content-scroll::-webkit-scrollbar-thumb {
+  background: #c5cdd8;
+  border-radius: 6px;
+}
+
+/* Pill tab strip (embed only) */
+.embed-tabs-pill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.embed-tab-pill {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  padding: 0.5rem 0.95rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+@media (min-width: 576px) {
+  .embed-tab-pill {
+    font-size: 0.875rem;
+    padding: 0.55rem 1.15rem;
+  }
+}
+
+.embed-tab-pill:hover {
+  color: var(--primary, #4f46e5);
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.embed-tab-pill:focus-visible {
+  outline: 2px solid var(--primary, #6366f1);
+  outline-offset: 2px;
+}
+
+.embed-tab-pill.active {
+  background: #fff;
+  color: var(--primary, #4f46e5);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Use full card width (fields still use Bootstrap col-* from JSON) */
+.embed-form-row {
+  max-width: none;
+  width: 100%;
+}
+
+/* Stronger section titles in embed */
+.rightsidebar-field-section-title--embed {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 1.25rem !important;
+}
+
+.rightsidebar-field-section-title--embed span {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em;
+  color: #111827 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 4px solid var(--primary, #6366f1);
+  line-height: 1.35;
+}
+
+.embed-tab-panel .row > .col-12:first-child .rightsidebar-field-section-title--embed {
+  margin-top: 0 !important;
+}
+
+/* Pinned below scroll area (flex sibling, not sticky) */
+.rightsidebar-embed-actions {
+  flex-shrink: 0;
+  background: #fff;
+  border-top: 1px solid #e8ecf0 !important;
 }
