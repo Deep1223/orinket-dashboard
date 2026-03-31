@@ -13,6 +13,21 @@ import SeriesAssignJson from '../app/common/SeriesAssignMaster/SeriesAssignMaste
 import ProductMasterJson from '../app/common/ProductMaster/ProductMasterJson';
 import SubCategoryMasterJson from '../app/common/SubCategoryMaster/SubCategoryMasterJson';
 import GeneralSettingMasterJson from '../app/common/GeneralSetting/GeneralSettingMasterJson';
+import StorefrontHomepageMasterJson from '../app/common/StorefrontHomepageMaster/StorefrontHomepageMasterJson';
+import StorefrontDemifineMasterJson from '../app/common/StorefrontDemifineMaster/StorefrontDemifineMasterJson';
+import StorefrontTopStylesMasterJson from '../app/common/StorefrontTopStylesMaster/StorefrontTopStylesMasterJson';
+import StorefrontDiscountBannerMasterJson from '../app/common/StorefrontDiscountBannerMaster/StorefrontDiscountBannerMasterJson';
+import StorefrontShopByRecipientMasterJson from '../app/common/StorefrontShopByRecipientMaster/StorefrontShopByRecipientMasterJson';
+import StorefrontForEveryYouMasterJson from '../app/common/StorefrontForEveryYouMaster/StorefrontForEveryYouMasterJson';
+import StorefrontFineGoldMasterJson from '../app/common/StorefrontFineGoldMaster/StorefrontFineGoldMasterJson';
+import StorefrontDeserveToShineMasterJson from '../app/common/StorefrontDeserveToShineMaster/StorefrontDeserveToShineMasterJson';
+import StorefrontFounderMessageMasterJson from '../app/common/StorefrontFounderMessageMaster/StorefrontFounderMessageMasterJson';
+import StorefrontBlogSectionMasterJson from '../app/common/StorefrontBlogSectionMaster/StorefrontBlogSectionMasterJson';
+import StorefrontShopWithConfidenceMasterJson from '../app/common/StorefrontShopWithConfidenceMaster/StorefrontShopWithConfidenceMasterJson';
+import StorefrontBrandStoryMasterJson from '../app/common/StorefrontBrandStoryMaster/StorefrontBrandStoryMasterJson';
+import StorefrontReviewsMasterJson from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMasterJson';
+import StorefrontCtaBannerMasterJson from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMasterJson';
+import StorefrontVisitStoresMasterJson from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMasterJson';
 
 const MasterJson = (type) => {
   switch (type) {
@@ -46,6 +61,36 @@ const MasterJson = (type) => {
       return SubCategoryMasterJson;
     case 'generalsetting':
       return GeneralSettingMasterJson;
+    case 'storefronthomepage':
+      return StorefrontHomepageMasterJson;
+    case 'storefrontdemifinemaster':
+      return StorefrontDemifineMasterJson;
+    case 'storefronttopstylesmaster':
+      return StorefrontTopStylesMasterJson;
+    case 'storefrontdiscountbannermaster':
+      return StorefrontDiscountBannerMasterJson;
+    case 'storefrontshopbyrecipientmaster':
+      return StorefrontShopByRecipientMasterJson;
+    case 'storefrontforeveryyoumaster':
+      return StorefrontForEveryYouMasterJson;
+    case 'storefrontfinegoldmaster':
+      return StorefrontFineGoldMasterJson;
+    case 'storefrontdeservetoshinemaster':
+      return StorefrontDeserveToShineMasterJson;
+    case 'storefrontfoundermessagemaster':
+      return StorefrontFounderMessageMasterJson;
+    case 'storefrontblogsectionmaster':
+      return StorefrontBlogSectionMasterJson;
+    case 'storefrontshopwithconfidencemaster':
+      return StorefrontShopWithConfidenceMasterJson;
+    case 'storefrontbrandstorymaster':
+      return StorefrontBrandStoryMasterJson;
+    case 'storefrontreviewsmaster':
+      return StorefrontReviewsMasterJson;
+    case 'storefrontctabannermaster':
+      return StorefrontCtaBannerMasterJson;
+    case 'storefrontvisitstoresmaster':
+      return StorefrontVisitStoresMasterJson;
     default:
       return [];
   }

@@ -2,6 +2,7 @@
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Dashboard from '../pages/Dashboard';
+import { FLAT_ROUTES_META } from './flatRoutesMeta';
 import AllMaster from '../app/common/AllMaster/AllMaster';
 import Category from '../pages/Category';
 import UserMaster from '../app/common/usermaster/UserMaster';
@@ -18,6 +19,22 @@ import SeriesAssignMaster from '../app/common/SeriesAssignMaster/SeriesAssignMas
 import ProductMaster from '../app/common/ProductMaster/ProductMaster';
 import SubCategoryMaster from '../app/common/SubCategoryMaster/SubCategoryMaster';
 import GeneralSetting from '../app/common/GeneralSetting/GeneralSetting';
+import StorefrontHomepageMaster from '../app/common/StorefrontHomepageMaster/StorefrontHomepageMaster';
+import StorefrontSectionsMaster from '../app/common/StorefrontSectionsMaster/StorefrontSectionsMaster';
+import StorefrontDemifineMaster from '../app/common/StorefrontDemifineMaster/StorefrontDemifineMaster';
+import StorefrontTopStylesMaster from '../app/common/StorefrontTopStylesMaster/StorefrontTopStylesMaster';
+import StorefrontDiscountBannerMaster from '../app/common/StorefrontDiscountBannerMaster/StorefrontDiscountBannerMaster';
+import StorefrontShopByRecipientMaster from '../app/common/StorefrontShopByRecipientMaster/StorefrontShopByRecipientMaster';
+import StorefrontForEveryYouMaster from '../app/common/StorefrontForEveryYouMaster/StorefrontForEveryYouMaster';
+import StorefrontFineGoldMaster from '../app/common/StorefrontFineGoldMaster/StorefrontFineGoldMaster';
+import StorefrontDeserveToShineMaster from '../app/common/StorefrontDeserveToShineMaster/StorefrontDeserveToShineMaster';
+import StorefrontFounderMessageMaster from '../app/common/StorefrontFounderMessageMaster/StorefrontFounderMessageMaster';
+import StorefrontBlogSectionMaster from '../app/common/StorefrontBlogSectionMaster/StorefrontBlogSectionMaster';
+import StorefrontShopWithConfidenceMaster from '../app/common/StorefrontShopWithConfidenceMaster/StorefrontShopWithConfidenceMaster';
+import StorefrontBrandStoryMaster from '../app/common/StorefrontBrandStoryMaster/StorefrontBrandStoryMaster';
+import StorefrontReviewsMaster from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMaster';
+import StorefrontCtaBannerMaster from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMaster';
+import StorefrontVisitStoresMaster from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMaster';
 
 /* ── Auth routes (no layout) ── */
 export const AUTH_ROUTES = [
@@ -26,23 +43,44 @@ export const AUTH_ROUTES = [
     { path: '/signup', component: Signup },
 ];
 
+const COMPONENT_BY_PATH = {
+    '/dashboard': Dashboard,
+    '/allmaster': AllMaster,
+    '/menumaster': MenuMaster,
+    '/iconmaster': IconMaster,
+    '/modulemaster': ModuleMaster,
+    '/menuassignmaster': MenuAssign,
+    '/seriesassignmaster': SeriesAssignMaster,
+    '/category': Category,
+    '/usermaster': UserMaster,
+    '/userrole': UserRoleMaster,
+    '/seriesmaster': SeriesMaster,
+    '/countrymaster': CountryMaster,
+    '/citymaster': CityMaster,
+    '/statemaster': StateMaster,
+    '/productmaster': ProductMaster,
+    '/subcategorymaster': SubCategoryMaster,
+    '/generalsetting': GeneralSetting,
+    '/storefronthomepage': StorefrontHomepageMaster,
+    '/storefrontsections': StorefrontSectionsMaster,
+    '/demifinemaster': StorefrontDemifineMaster,
+    '/top-styles-master': StorefrontTopStylesMaster,
+    '/discount-banner-master': StorefrontDiscountBannerMaster,
+    '/shop-by-recipient-master': StorefrontShopByRecipientMaster,
+    '/for-every-you-master': StorefrontForEveryYouMaster,
+    '/fine-gold-master': StorefrontFineGoldMaster,
+    '/deserve-to-shine-master': StorefrontDeserveToShineMaster,
+    '/founder-message-master': StorefrontFounderMessageMaster,
+    '/blog-section-master': StorefrontBlogSectionMaster,
+    '/shop-with-confidence-master': StorefrontShopWithConfidenceMaster,
+    '/brand-story-master': StorefrontBrandStoryMaster,
+    '/reviews-master': StorefrontReviewsMaster,
+    '/cta-banner-master': StorefrontCtaBannerMaster,
+    '/visit-stores-master': StorefrontVisitStoresMaster,
+};
+
 /* ── Flat app routes ── */
-export const FLAT_ROUTES = [
-    { path: '/dashboard', pageKey: null, label: 'Home', showInSidebar: true, component: Dashboard },
-    { path: '/allmaster', pageKey: null, label: 'All Masters', showInSidebar: false, component: AllMaster },
-    { path: '/menumaster', pageKey: 'menumaster', label: 'Menu Master', component: MenuMaster },
-    { path: '/iconmaster', pageKey: 'iconmaster', label: 'Icon Master', component: IconMaster },
-    { path: '/modulemaster', pageKey: 'modulemaster', label: 'Module Master', component: ModuleMaster },
-    { path: '/menuassignmaster', pageKey: 'menuassignmaster', label: 'Menu Assign', component: MenuAssign },
-    { path: '/seriesassignmaster', pageKey: 'seriesassignmaster', label: 'Series Assign', component: SeriesAssignMaster },
-    { path: '/category', pageKey: 'category', label: 'Category', component: Category },
-    { path: '/usermaster', pageKey: 'usermaster', label: 'User Master', component: UserMaster },
-    { path: '/userrole', pageKey: 'userrole', label: 'User Role', component: UserRoleMaster },
-    { path: '/seriesmaster', pageKey: 'seriesmaster', label: 'Series Master', component: SeriesMaster },
-    { path: '/countrymaster', pageKey: 'countrymaster', label: 'Country Master', component: CountryMaster },
-    { path: '/citymaster', pageKey: 'citymaster', label: 'City Master', component: CityMaster },
-    { path: '/statemaster', pageKey: 'statemaster', label: 'State Master', component: StateMaster },
-    { path: '/productmaster', pageKey: 'productmaster', label: 'Product Master', component: ProductMaster },
-    { path: '/subcategorymaster', pageKey: 'subcategorymaster', label: 'Sub Category Master', component: SubCategoryMaster },
-    { path: '/generalsetting', pageKey: 'generalsetting', label: 'General Settings', component: GeneralSetting },
-];
+export const FLAT_ROUTES = FLAT_ROUTES_META.map((r) => ({
+    ...r,
+    component: COMPONENT_BY_PATH[r.path],
+}));

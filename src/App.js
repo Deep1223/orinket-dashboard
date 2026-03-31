@@ -114,7 +114,8 @@ function MainApp() {
                 {!isAuthPage && showLayout && <Header />}
 
                 <main className={`flex-grow-1 d-flex flex-column min-h-0 overflow-hidden ${showLayout ? 'p-3' : ''}`}>
-                    <div className="flex-grow-1 min-h-0 d-flex flex-column overflow-hidden">
+                    {/* overflow-y-auto: dashboard + long pages scroll inside main (sidebar/header stay fixed) */}
+                    <div className="flex-grow-1 min-h-0 d-flex flex-column overflow-y-auto">
                         <Routes>
                             {AUTH_ROUTES.map(({ path, component: Component }) => (
                                 <Route key={path} path={path} element={
