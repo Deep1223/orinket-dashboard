@@ -76,12 +76,6 @@ const TableAddButtonField = (props) => {
     }
   };
 
-  const handleCellEdit = (index, fieldName, value, fieldType) => {
-    // Edit cell via handleFormData with 5 arguments: type ('tbl-add-button'), key (fields.field), value (index), fieldtype (fieldType for logic, fieldName for key), fieldvalue (newValue)
-    // Note: MasterController will need to know if it's a checkbox/dropdown for specific handling
-    props.handleFormData(props.fields.type, props.fields.field, index, fieldType, { [fieldName]: value });
-  };
-
   const handleTableImageChange = async (e, tableField) => {
     const file = e.target.files[0];
     if (file) {

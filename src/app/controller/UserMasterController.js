@@ -18,12 +18,12 @@ const UserMasterController = () => {
   const lastAliasRef = useRef(null);
   const location = useLocation();
 
-  const masterdatalist = useAppSelector((s) => s.masterdatalist); // Add masterdata selector
   const masterdata = useAppSelector((s) => s.masterdata); // Add masterdata selector
 
   console.log('FLAT_ROUTES => ', FLAT_ROUTES)
   const currentRoute = FLAT_ROUTES.find((r) => r.path === location.pathname);
   const expectedAlias = currentRoute?.pageKey;
+  const sidebarAlias = rightSidebarData?.[0]?.aliasname;
 
   useEffect(() => {
     isMounted.current = true;
@@ -78,7 +78,7 @@ const UserMasterController = () => {
   }, []);
 
   useEffect(() => {
-    const aliasName = rightSidebarData?.[0]?.aliasname;
+    const aliasName = sidebarAlias;
 
     // Only proceed if:
     // 1. We have a valid aliasname
@@ -113,7 +113,8 @@ const UserMasterController = () => {
         });
       });
     }
-  }, [rightSidebarData?.[0]?.aliasname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run when alias changes; getmasterdata/getlist omitted to avoid loops
+  }, [sidebarAlias, expectedAlias]);
 
   const printSelectPicker = (item, fields) => item[fields.masterdatafield || 'name'] || item.name || item._id;
 

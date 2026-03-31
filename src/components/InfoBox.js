@@ -70,71 +70,88 @@ const getPosition = (anchorRect, panelWidth, panelHeight, placement) => {
 };
 
 const InfoBox = (props) => {
+    const {
+        open,
+        onClose,
+        anchorEl,
+        placement,
+        width,
+        backdrop,
+        closable,
+        className,
+        headerClassName,
+        bodyClassName,
+        footerClassName,
+        title,
+        body,
+        footer,
+    } = props;
+
     const panelRef = useRef(null);
     const [pos, setPos] = useState({ x: -9999, y: -9999 });
 
     // ── Position panel ───────────────────────────────────────────────────────
     useEffect(() => {
-        if (!props.open) return;
+        if (!open) return;
 
-        const anchor = props.anchorEl?.current ?? props.anchorEl;
+        const anchor = anchorEl?.current ?? anchorEl;
         if (!anchor) return;
 
         // Use a short RAF so panel is mounted and measurable
         const frame = requestAnimationFrame(() => {
             const anchorRect = anchor.getBoundingClientRect();
             const panelEl    = panelRef.current;
-            const panelW     = props.width || 400;
+            const panelW     = width || 400;
             const panelH     = panelEl ? panelEl.offsetHeight : 300;
-            const { x, y }   = getPosition(anchorRect, panelW, panelH, props.placement);
+            const { x, y }   = getPosition(anchorRect, panelW, panelH, placement);
             setPos({ x, y });
         });
 
         return () => cancelAnimationFrame(frame);
-    }, [props.open, props.anchorEl, props.placement, props.width]);
+    }, [open, anchorEl, placement, width]);
 
     // ── ESC key ──────────────────────────────────────────────────────────────
     useEffect(() => {
-        if (!props.open) return;
+        if (!open) return;
         const handler = (e) => {
-            if (e.key === 'Escape' && props.closable !== false) props.onClose?.();
+            if (e.key === 'Escape' && closable !== false) onClose?.();
         };
         document.addEventListener('keydown', handler);
         return () => document.removeEventListener('keydown', handler);
-    }, [props.open, props.closable, props.onClose]);
+    }, [open, closable, onClose]);
 
     // ── Outside click ────────────────────────────────────────────────────────
     useEffect(() => {
-        if (!props.open || props.backdrop === false) return;
+        if (!open || backdrop === false) return;
         const handler = (e) => {
-            const anchor = props.anchorEl?.current ?? props.anchorEl;
+            const anchor = anchorEl?.current ?? anchorEl;
             if (
                 panelRef.current && !panelRef.current.contains(e.target) &&
                 (!anchor || !anchor.contains(e.target))
             ) {
-                props.onClose?.();
+                onClose?.();
             }
         };
         const t = setTimeout(() => document.addEventListener('mousedown', handler), 0);
         return () => { clearTimeout(t); document.removeEventListener('mousedown', handler); };
-    }, [props.open, props.backdrop, props.anchorEl, props.onClose]);
+    }, [open, backdrop, anchorEl, onClose]);
 
-    if (!props.open) return null;
+    if (!open) return null;
 
     return (
         <div
             ref={panelRef}
-            className={`infobox-panel ${props.className || ''}`}
-            style={{ position: 'fixed', top: pos.y, left: pos.x, width: props.width || 400 }}
+            className={`infobox-panel ${className || ''}`}
+            style={{ position: 'fixed', top: pos.y, left: pos.x, width: width || 400 }}
             role="dialog"
             aria-modal="true"
             aria-labelledby="infobox-title"
         >
             {/* ── Header ── */}
-            <div className={`infobox-header ${props.headerClassName || ''}`}>
-                <h5 className="infobox-title w-100" id="infobox-title">{props.title}</h5>
-                {props.closable !== false && (
-                    <button className="infobox-close-btn" onClick={props.onClose} aria-label="Close">
+            <div className={`infobox-header ${headerClassName || ''}`}>
+                <h5 className="infobox-title w-100" id="infobox-title">{title}</h5>
+                {closable !== false && (
+                    <button className="infobox-close-btn" onClick={onClose} aria-label="Close">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" strokeWidth="2.5"
                             strokeLinecap="round" strokeLinejoin="round">
@@ -146,14 +163,14 @@ const InfoBox = (props) => {
             </div>
 
             {/* ── Body ── */}
-            <div className={`infobox-body ${props.bodyClassName || ''}`}>
-                {props.body}
+            <div className={`infobox-body ${bodyClassName || ''}`}>
+                {body}
             </div>
 
             {/* ── Footer ── */}
-            {props.footer && (
-                <div className={`infobox-footer ${props.footerClassName || ''}`}>
-                    {props.footer}
+            {footer && (
+                <div className={`infobox-footer ${footerClassName || ''}`}>
+                    {footer}
                 </div>
             )}
         </div>

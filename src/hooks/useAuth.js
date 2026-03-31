@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppSelector } from '../store/hooks';
 import { setProps } from '../utils/reduxUtils';
 import StorageService from '../utils/StorageService';
 import IISMethods from '../utils/IISMethods';
@@ -13,7 +13,6 @@ import Config from '../config/config';
  */
 const useAuth = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const loginInfo = useAppSelector((state) => state.logininfo);
 
   const login = useCallback(async (authData) => {

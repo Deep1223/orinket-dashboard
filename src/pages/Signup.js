@@ -4,7 +4,6 @@ import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaPhone, FaLock, FaChevronRight 
 import IISMethods from '../utils/IISMethods';
 import Config from '../config/config';
 import apiService from '../utils/apiService';
-import { getCookie } from '../utils/cookieUtils';
 
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 const PHONE_REGEX = /^[+]?[\d\s()-]{10,}$/;

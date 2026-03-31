@@ -104,6 +104,7 @@ const StorefrontHomeSingletonController = ({ alias }) => {
                 loading: {},
             });
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- loadSingle is recreated each render; effect keyed by alias
     }, [alias]);
 
     const saveData = async (raw) => {

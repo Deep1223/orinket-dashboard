@@ -13,29 +13,6 @@ import StorefrontSectionsMasterJson from '../common/StorefrontSectionsMaster/Sto
 import GeneralSettingView from '../common/GeneralSetting/GeneralSettingView';
 
 const ALIAS = 'generalsetting';
-const CMS_KEYS = [
-    'demifineSection',
-    'topStylesSection',
-    'discountBanner',
-    'shopByRecipient',
-    'forEveryYou',
-    'fineGoldSection',
-    'deserveToShine',
-    'founderMessage',
-    'blogSection',
-    'shopWithConfidence',
-    'brandStory',
-    'reviews',
-    'ctaBanner',
-    'visitStores',
-    'aboutPage',
-    'storyPage',
-    'careersPage',
-    'jobOpenings',
-    'blogPosts',
-    'storeLocations',
-    'supportPages',
-];
 
 const MAP = {
     demifineSectionJson: 'demifineSection',
@@ -158,6 +135,7 @@ const StorefrontSectionsController = () => {
                 loading: {},
             });
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only; loadSingleSetting is not stable across renders
     }, []);
 
     const buildPayload = (formData) => {

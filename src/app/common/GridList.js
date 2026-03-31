@@ -6,7 +6,6 @@ import { FaRegEdit, FaInfoCircle } from 'react-icons/fa';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoEyeOutline } from 'react-icons/io5';
 import { TbGridDots } from 'react-icons/tb';
-import { FiEye } from 'react-icons/fi';
 import { Placeholder } from 'rsuite';
 import { setProps } from '../../utils/reduxUtils';
 import NoDataFound from '../../components/NoDataFound';

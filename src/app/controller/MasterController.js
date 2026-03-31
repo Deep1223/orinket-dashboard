@@ -25,6 +25,7 @@ const MasterController = () => {
 
   const currentRoute = FLAT_ROUTES.find((r) => r.path === location.pathname);
   const expectedAlias = currentRoute?.pageKey;
+  const sidebarAlias = rightSidebarData?.[0]?.aliasname;
 
   useEffect(() => {
     isMounted.current = true;
@@ -80,7 +81,7 @@ const MasterController = () => {
   }, []);
 
   useEffect(() => {
-    const aliasName = rightSidebarData?.[0]?.aliasname;
+    const aliasName = sidebarAlias;
 
     // Only proceed if:
     // 1. We have a valid aliasname
@@ -115,7 +116,8 @@ const MasterController = () => {
         });
       });
     }
-  }, [rightSidebarData?.[0]?.aliasname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run when alias changes; getmasterdata/getlist omitted to avoid loops
+  }, [sidebarAlias, expectedAlias]);
 
   const printSelectPicker = (item, fields) => {
     if (fields.field === 'iconid') {

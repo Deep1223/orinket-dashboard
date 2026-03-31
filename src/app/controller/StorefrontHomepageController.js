@@ -133,6 +133,7 @@ const StorefrontHomepageController = () => {
                 loading: {},
             });
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only; loadSingleSetting is not stable across renders
     }, []);
 
     const handleAddButtonClick = (currentTabIndex) => {

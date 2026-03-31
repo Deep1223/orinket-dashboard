@@ -25,6 +25,7 @@ const SeriesMaster = () => {
 
     const currentRoute = FLAT_ROUTES.find((r) => r.path === location.pathname);
     const expectedAlias = currentRoute?.pageKey;
+    const sidebarAlias = rightSidebarData?.[0]?.aliasname;
 
     useEffect(() => {
         isMounted.current = true;
@@ -71,7 +72,7 @@ const SeriesMaster = () => {
     }, []);
 
     useEffect(() => {
-        const aliasName = rightSidebarData?.[0]?.aliasname;
+        const aliasName = sidebarAlias;
 
         if (aliasName && isMounted.current && lastAliasRef.current !== aliasName) {
             if (expectedAlias && aliasName !== expectedAlias) {
@@ -101,7 +102,8 @@ const SeriesMaster = () => {
                 });
             });
         }
-    }, [rightSidebarData?.[0]?.aliasname]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- run when alias changes; getmasterdata/getlist omitted to avoid loops
+    }, [sidebarAlias, expectedAlias]);
 
     const printSelectPicker = (item, fields) => item[fields.masterdatafield || 'name'] || item.name || item._id;
 

@@ -667,12 +667,6 @@ const RightSidebar = (props) => {
         }
       };
 
-      const handleCellEdit = (index, fieldName, value, fieldType) => {
-        // Edit cell via handleFormData with 5 arguments: type ('tbl-add-button'), key (fields.field), value (index), fieldtype (fieldType for logic, fieldName for key), fieldvalue (newValue)
-        // Note: MasterController will need to know if it's a checkbox/dropdown for specific handling
-        props.handleFormData(fields.type, fields.field, index, fieldType, { [fieldName]: value });
-      };
-
       return (
         <div className="col-12">
           <div className="d-flex align-items-end gap-2">

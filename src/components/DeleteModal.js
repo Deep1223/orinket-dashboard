@@ -9,11 +9,9 @@ import { useAppSelector } from '../store/hooks';
 import { getCurrentState } from '../utils/reduxUtils';
 
 const DeleteModal = (props) => {
-  const modalData = useAppSelector((s) => s.modal);
   const [stage, setStage] = useState(1);
   const [confirmText, setConfirmText] = useState('');
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const confirmPhrase = 'DELETE';
 
   const bulkaction = useAppSelector((state) => state.bulkaction);
@@ -99,12 +97,12 @@ const DeleteModal = (props) => {
                 setStage(1);
                 setConfirmText('');
               }}
-              disabled={!isButtonEnabled || isDeleting}
+              disabled={!isButtonEnabled}
               className={`btn ${
                 isButtonEnabled ? 'btn-danger text-white' : 'btn-secondary text-light disabled'
               }`}
             >
-              {isDeleting ? 'Deleting...' : Config.deletebtn}
+              {Config.deletebtn}
             </button>
           )}
         </div>

@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify';
 import { getCurrentState, setProps } from './reduxUtils';
 import Config from '../config/config';
-import { getCookie } from './cookieUtils';
 
 class IISMethods {
 

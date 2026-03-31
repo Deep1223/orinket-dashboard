@@ -7,8 +7,6 @@ import Config from '../config/config';
 // localStorage imports removed - using backend only
 import useAuth from '../hooks/useAuth';
 import apiService from '../utils/apiService';
-import { getCookie } from '../utils/cookieUtils';
-
 const EMAIL_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const Login = () => {
@@ -44,7 +42,7 @@ const Login = () => {
 
   // Slider Logic
   const [activeSlide, setActiveSlide] = useState(0);
-  const [features, setFeatures] = useState(Config.loginFeatures);
+  const features = Config.loginFeatures;
 
 
   useEffect(() => {
