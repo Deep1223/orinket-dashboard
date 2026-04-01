@@ -42,7 +42,10 @@ const Config = {
   defaultBannerImage: '/stock-2.jpg',
 
   // ==================== API CONFIG ====================
-  localApiUrl: resolveDashboardApiBase(),
+  /** Getter so URL resolves at read time in the browser (avoids stale localhost if module init order differs). */
+  get localApiUrl() {
+    return resolveDashboardApiBase();
+  },
 
   // ==================== AUTH UI CONFIG ====================
   loginTitle: 'Sign in to your account',
