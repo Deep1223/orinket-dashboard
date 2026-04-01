@@ -4,6 +4,15 @@ import IISMethods from '../utils/IISMethods';
 // come from IISMethods, so changing IISMethods.API_BASE_URL and
 // IISMethods.STORAGE_MODE controls the whole common-project.
 
+/** Node backend base URL including `/api` (same contract as orinket `NEXT_PUBLIC_API_URL`). */
+function resolveDashboardApiBase() {
+  const raw =
+    process.env.REACT_APP_API_BASE_URL?.trim() ||
+    process.env.REACT_APP_LOCAL_API_URL?.trim() ||
+    'http://localhost:5000/api';
+  return raw.replace(/\/+$/, '');
+}
+
 const Config = {
   // ==================== APP CONFIG ====================
   projectName: 'DEMO',
@@ -18,7 +27,7 @@ const Config = {
   defaultBannerImage: '/stock-2.jpg',
 
   // ==================== API CONFIG ====================
-  localApiUrl: process.env.REACT_APP_LOCAL_API_URL || 'http://localhost:5000/api',
+  localApiUrl: resolveDashboardApiBase(),
 
   // ==================== AUTH UI CONFIG ====================
   loginTitle: 'Sign in to your account',
