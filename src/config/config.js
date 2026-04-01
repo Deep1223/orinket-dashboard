@@ -4,13 +4,28 @@ import IISMethods from '../utils/IISMethods';
 // come from IISMethods, so changing IISMethods.API_BASE_URL and
 // IISMethods.STORAGE_MODE controls the whole common-project.
 
-/** Node backend base URL including `/api` (same contract as orinket `NEXT_PUBLIC_API_URL`). */
+/**
+ * Node backend base URL including `/api` (same contract as orinket `NEXT_PUBLIC_API_URL`).
+ * If the build bakes `localhost` but the app runs on a real host (e.g. Railway), use the
+ * production API — fixes wrong Railway Variables or stale builds without a full env fix.
+ */
 function resolveDashboardApiBase() {
   const raw =
     process.env.REACT_APP_API_BASE_URL?.trim() ||
     process.env.REACT_APP_LOCAL_API_URL?.trim() ||
     'http://localhost:5000/api';
-  return raw.replace(/\/+$/, '');
+  let base = raw.replace(/\/+$/, '');
+
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    const isLocalHost = host === 'localhost' || host === '127.0.0.1';
+    const pointsToLocalApi = /localhost|127\.0\.0\.1/.test(base);
+    if (!isLocalHost && pointsToLocalApi) {
+      base = 'https://git-backend-production-3399.up.railway.app/api';
+    }
+  }
+
+  return base;
 }
 
 const Config = {
