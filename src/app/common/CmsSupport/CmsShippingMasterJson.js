@@ -1,0 +1,76 @@
+const CmsShippingMasterJson = [
+    {
+        tabname: 'Shipping page',
+        pagename: 'Shipping information (storefront)',
+        aliasname: 'cmsshipping',
+        rightsidebarsize: 'lg',
+        fields: [
+            {
+                field: 'title',
+                text: 'Title',
+                type: 'text',
+                defaultvisibility: true,
+                size: 'col-12',
+                defaultvalue: 'Shipping information',
+            },
+            {
+                field: 'subtitle',
+                text: 'Subtitle',
+                type: 'textarea',
+                defaultvisibility: true,
+                size: 'col-12',
+                defaultvalue: '',
+            },
+            {
+                field: 'packaging',
+                text: 'Packaging / handling copy',
+                type: 'textarea',
+                defaultvisibility: true,
+                size: 'col-12',
+                defaultvalue: '',
+            },
+            {
+                field: 'name',
+                text: 'Zone name',
+                type: 'text',
+                istablefield: true,
+                rightsidebartablesize: 'tbl-w-180p',
+            },
+            {
+                field: 'eta',
+                text: 'ETA',
+                type: 'text',
+                istablefield: true,
+                rightsidebartablesize: 'tbl-w-160p',
+            },
+            {
+                field: 'note',
+                text: 'Note',
+                type: 'text',
+                istablefield: true,
+                rightsidebartablesize: 'tbl-w-220p',
+            },
+            {
+                field: 'zones',
+                text: 'Shipping zones',
+                type: 'tbl-add-button',
+                disabled: false,
+                required: false,
+                defaultvisibility: true,
+                size: 'col-12',
+                defaultvalue: [],
+                tablefields: ['name', 'eta', 'note'],
+            },
+            {
+                field: 'bulletsText',
+                text: 'Bullet points (one per line)',
+                type: 'textarea',
+                defaultvisibility: true,
+                size: 'col-12',
+                defaultvalue: '',
+            },
+        ],
+    },
+];
+
+export default CmsShippingMasterJson;

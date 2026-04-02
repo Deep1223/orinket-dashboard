@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import ReactApexChart from 'react-apexcharts';
 import { FLAT_ROUTES_META } from '../config/flatRoutesMeta';
 import Config from '../config/config';
 
@@ -12,23 +13,64 @@ function numberCompact(value) {
   return `${n}`;
 }
 
-function MiniLineChart({ values, color = '#3b82f6' }) {
-  const clean = values.map((v) => Number(v || 0));
-  const max = Math.max(1, ...clean);
-  const min = Math.min(...clean);
-  const range = Math.max(1, max - min);
-  const points = clean
-    .map((v, i) => {
-      const x = (i / Math.max(1, clean.length - 1)) * 100;
-      const y = 100 - ((v - min) / range) * 100;
-      return `${x},${y}`;
-    })
-    .join(' ');
-  return (
-    <svg viewBox="0 0 100 100" style={{ width: '100%', height: CHART_HEIGHT }}>
-      <polyline fill="none" stroke={color} strokeWidth="2.5" points={points} />
-    </svg>
+/** 7-day revenue trend — ApexCharts line (sparkline-style, axes hidden). */
+function MiniLineChart({ values, labels = [], color = '#3b82f6', seriesName = 'Revenue' }) {
+  const clean = useMemo(
+    () => (Array.isArray(values) && values.length > 0 ? values.map((v) => Number(v || 0)) : [0]),
+    [values]
   );
+  const categories = useMemo(() => {
+    if (labels.length === clean.length && labels.length > 0) return labels.map(String);
+    return clean.map((_, i) => String(i + 1));
+  }, [labels, clean]);
+
+  const options = useMemo(
+    () => ({
+      chart: {
+        type: 'line',
+        toolbar: { show: false },
+        zoom: { enabled: false },
+        animations: { enabled: true },
+        fontFamily: 'inherit',
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2.5,
+        colors: [color],
+      },
+      colors: [color],
+      grid: {
+        show: false,
+        padding: { top: 4, right: 8, bottom: 4, left: 8 },
+      },
+      xaxis: {
+        categories,
+        labels: { show: false },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        tooltip: { enabled: false },
+      },
+      yaxis: { show: false },
+      dataLabels: { enabled: false },
+      markers: {
+        size: 0,
+        strokeWidth: 0,
+        hover: { size: 5, sizeOffset: 0 },
+      },
+      tooltip: {
+        theme: 'light',
+        x: { show: true },
+        y: {
+          formatter: (val) => (typeof val === 'number' ? Number(val).toLocaleString() : String(val)),
+        },
+      },
+    }),
+    [categories, color]
+  );
+
+  const series = useMemo(() => [{ name: seriesName, data: clean }], [seriesName, clean]);
+
+  return <ReactApexChart options={options} series={series} type="line" height={CHART_HEIGHT} width="100%" />;
 }
 
 function MiniBarChart({ values, color = '#16a34a' }) {
@@ -388,7 +430,12 @@ const Dashboard = () => {
                   <h3 className="h6 fw-semibold mb-0">Revenue trend (7 days)</h3>
                   <span className="small text-muted">Auto</span>
                 </div>
-                <MiniLineChart values={trendRows.map((d) => d.revenue)} color="#2563eb" />
+                <MiniLineChart
+                  values={trendRows.map((d) => d.revenue)}
+                  labels={trendRows.map((d) => d.date)}
+                  color="#2563eb"
+                  seriesName="Revenue (Rs)"
+                />
                 <div className="d-flex justify-content-between small text-muted mt-2">
                   <span>{trendRows[0]?.date || ''}</span>
                   <span>{trendRows[trendRows.length - 1]?.date || ''}</span>

@@ -35,6 +35,10 @@ import StorefrontBrandStoryMaster from '../app/common/StorefrontBrandStoryMaster
 import StorefrontReviewsMaster from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMaster';
 import StorefrontCtaBannerMaster from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMaster';
 import StorefrontVisitStoresMaster from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMaster';
+import CmsContactMaster from '../app/common/CmsSupport/CmsContactMaster';
+import CmsFaqMasterPage from '../pages/CmsFaqMasterPage';
+import CmsShippingMaster from '../app/common/CmsSupport/CmsShippingMaster';
+import CmsReturnsMaster from '../app/common/CmsSupport/CmsReturnsMaster';
 
 /* ── Auth routes (no layout) ── */
 export const AUTH_ROUTES = [
@@ -77,6 +81,10 @@ const COMPONENT_BY_PATH = {
     '/reviews-master': StorefrontReviewsMaster,
     '/cta-banner-master': StorefrontCtaBannerMaster,
     '/visit-stores-master': StorefrontVisitStoresMaster,
+    '/cmscontact': CmsContactMaster,
+    '/cmsfaq': CmsFaqMasterPage,
+    '/cmsshipping': CmsShippingMaster,
+    '/cmsreturns': CmsReturnsMaster,
 };
 
 /* ── Flat app routes ── */

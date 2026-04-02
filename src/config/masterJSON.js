@@ -28,6 +28,10 @@ import StorefrontBrandStoryMasterJson from '../app/common/StorefrontBrandStoryMa
 import StorefrontReviewsMasterJson from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMasterJson';
 import StorefrontCtaBannerMasterJson from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMasterJson';
 import StorefrontVisitStoresMasterJson from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMasterJson';
+import CmsContactMasterJson from '../app/common/CmsSupport/CmsContactMasterJson';
+import CmsFaqMasterJson from '../app/common/CmsSupport/CmsFaqMasterJson';
+import CmsShippingMasterJson from '../app/common/CmsSupport/CmsShippingMasterJson';
+import CmsReturnsMasterJson from '../app/common/CmsSupport/CmsReturnsMasterJson';
 
 const MasterJson = (type) => {
   switch (type) {
@@ -91,6 +95,14 @@ const MasterJson = (type) => {
       return StorefrontCtaBannerMasterJson;
     case 'storefrontvisitstoresmaster':
       return StorefrontVisitStoresMasterJson;
+    case 'cmscontact':
+      return CmsContactMasterJson;
+    case 'cmsfaq':
+      return CmsFaqMasterJson;
+    case 'cmsshipping':
+      return CmsShippingMasterJson;
+    case 'cmsreturns':
+      return CmsReturnsMasterJson;
     default:
       return [];
   }

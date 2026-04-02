@@ -35,4 +35,8 @@ export const FLAT_ROUTES_META = [
     { path: '/reviews-master', pageKey: 'storefrontreviewsmaster', label: 'Storefront Reviews', showInSidebar: true },
     { path: '/cta-banner-master', pageKey: 'storefrontctabannermaster', label: 'Storefront CTA Banner', showInSidebar: true },
     { path: '/visit-stores-master', pageKey: 'storefrontvisitstoresmaster', label: 'Storefront Visit Stores', showInSidebar: true },
+    { path: '/cmscontact', pageKey: 'cmscontact', label: 'Contact page', showInSidebar: true },
+    { path: '/cmsfaq', pageKey: 'cmsfaq', label: 'FAQ Master', showInSidebar: true },
+    { path: '/cmsshipping', pageKey: 'cmsshipping', label: 'Shipping page', showInSidebar: true },
+    { path: '/cmsreturns', pageKey: 'cmsreturns', label: 'Returns & exchanges', showInSidebar: true },
 ];
