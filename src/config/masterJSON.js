@@ -15,7 +15,6 @@ import SubCategoryMasterJson from '../app/common/SubCategoryMaster/SubCategoryMa
 import GeneralSettingMasterJson from '../app/common/GeneralSetting/GeneralSettingMasterJson';
 import StorefrontHomepageMasterJson from '../app/common/StorefrontHomepageMaster/StorefrontHomepageMasterJson';
 import StorefrontDemifineMasterJson from '../app/common/StorefrontDemifineMaster/StorefrontDemifineMasterJson';
-import StorefrontTopStylesMasterJson from '../app/common/StorefrontTopStylesMaster/StorefrontTopStylesMasterJson';
 import StorefrontDiscountBannerMasterJson from '../app/common/StorefrontDiscountBannerMaster/StorefrontDiscountBannerMasterJson';
 import StorefrontShopByRecipientMasterJson from '../app/common/StorefrontShopByRecipientMaster/StorefrontShopByRecipientMasterJson';
 import StorefrontForEveryYouMasterJson from '../app/common/StorefrontForEveryYouMaster/StorefrontForEveryYouMasterJson';
@@ -69,8 +68,6 @@ const MasterJson = (type) => {
       return StorefrontHomepageMasterJson;
     case 'storefrontdemifinemaster':
       return StorefrontDemifineMasterJson;
-    case 'storefronttopstylesmaster':
-      return StorefrontTopStylesMasterJson;
     case 'storefrontdiscountbannermaster':
       return StorefrontDiscountBannerMasterJson;
     case 'storefrontshopbyrecipientmaster':

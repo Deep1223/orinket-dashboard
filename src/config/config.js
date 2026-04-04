@@ -13,7 +13,7 @@ function resolveDashboardApiBase() {
   const raw =
     process.env.REACT_APP_API_BASE_URL?.trim() ||
     process.env.REACT_APP_LOCAL_API_URL?.trim() ||
-    'https://git-backend-production-3399.up.railway.app/api';
+    'http://localhost:5000/api';
   let base = raw.replace(/\/+$/, '');
 
   if (typeof window !== 'undefined') {

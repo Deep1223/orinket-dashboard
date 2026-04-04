@@ -11,17 +11,17 @@ const postFields = (index) => [
 
 const StorefrontBlogSectionMasterJson = [
     {
-        tabname: 'Blog section',
-        pagename: 'Storefront Blog Section Master',
+        tabname: 'Blog Master',
+        pagename: 'Blog Master',
         aliasname: 'storefrontblogsectionmaster',
         rightsidebarsize: 'lg',
         fields: [
-            textField('title', 'Title', 'Blog section', { showingrid: true, sorting: true, required: true }),
+            textField('title', 'Title', '', { showingrid: true, sorting: true, required: true }),
             ...postFields(1),
             ...postFields(2),
             ...postFields(3),
-            textField('buttonText', 'Button Text', 'Blog section'),
-            textField('buttonHref', 'Button Link', 'Blog section'),
+            textField('buttonText', 'Button Text', ''),
+            textField('buttonHref', 'Button Link', ''),
         ],
     },
 ];

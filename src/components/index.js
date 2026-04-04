@@ -23,6 +23,7 @@ export { default as ColorPickerRenderField } from './RenderViewField/ColorPicker
 export { default as TableAddButtonRenderField } from './RenderViewField/TableAddButtonRenderField';
 export { default as PasswordRenderField } from './RenderViewField/PasswordRenderField';
 export { default as DefaultRenderField } from './RenderViewField/DefaultRenderField';
+export { default as MultiselectPickerRenderField } from './RenderViewField/MultiselectPickerRenderField';
 
 // RightSidebar Components
 export { default as TextField } from './RightSidebar/TextField';

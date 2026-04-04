@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaCog, FaMobileAlt, FaChartBar, FaQuestionCircle, FaCommentAlt, FaSignOutAlt, FaShieldAlt } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import DrawerRsuite from './DrawerRsuite';
@@ -7,20 +8,43 @@ import IISMethods from '../utils/IISMethods';
 import ApiService from '../utils/apiService';
 
 // ── Reusable menu item ────────────────────────────────────────────────────────
-const MenuItem = ({ icon, color, title, desc, badge, rightElement }) => (
-    <div className="pd-menu-item">
-        <div className={`pd-menu-icon pd-ic-${color}`}>{icon}</div>
-        <div className="pd-menu-info">
-            <div className="pd-menu-title">{title}</div>
-            <div className="pd-menu-desc">{desc}</div>
-        </div>
-        {badge && <span className="badge badge-danger">{badge}</span>}
-        {rightElement
-            ? <div className="pd-menu-right">{rightElement}</div>
-            : <span className="pd-menu-arrow">›</span>
-        }
-    </div>
-);
+const MenuItem = ({ icon, color, title, desc, badge, rightElement, onClick }) => {
+    const clickable = Boolean(onClick);
+    const common = (
+        <>
+            <div className={`pd-menu-icon pd-ic-${color}`}>{icon}</div>
+            <div className="pd-menu-info">
+                <div className="pd-menu-title">{title}</div>
+                <div className="pd-menu-desc">{desc}</div>
+            </div>
+            {badge && <span className="badge badge-danger">{badge}</span>}
+            {rightElement ? (
+                <div className="pd-menu-right">{rightElement}</div>
+            ) : (
+                <span className="pd-menu-arrow">›</span>
+            )}
+        </>
+    );
+    if (clickable) {
+        return (
+            <div
+                className="pd-menu-item pd-menu-item-clickable"
+                role="button"
+                tabIndex={0}
+                onClick={onClick}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onClick(e);
+                    }
+                }}
+            >
+                {common}
+            </div>
+        );
+    }
+    return <div className="pd-menu-item">{common}</div>;
+};
 
 // ── Toggle Switch ─────────────────────────────────────────────────────────────
 const Toggle = ({ checked, onChange }) => (
@@ -32,12 +56,23 @@ const Toggle = ({ checked, onChange }) => (
 
 // ── Profile Drawer Body ───────────────────────────────────────────────────────
 const ProfileDrawerBody = ({ loginInfo, onSignOut, onClose }) => {
-    const userName = loginInfo?.user?.firstName || loginInfo?.user?.firstname || loginInfo?.user?.email || 'Guest';
+    const navigate = useNavigate();
+    const userName =
+        loginInfo?.user?.firstName ||
+        loginInfo?.user?.firstname ||
+        [loginInfo?.user?.firstname, loginInfo?.user?.lastname].filter(Boolean).join(' ') ||
+        loginInfo?.user?.email ||
+        'Guest';
     const userRole = loginInfo?.user?.role || 'User';
     const userEmail = loginInfo?.user?.email || '';
     const userCode = loginInfo?.user?.usercode || '';
     const initial = userName.charAt(0).toUpperCase();
-    const is2FAEnabled = loginInfo?.user?.is2FAEnabled || false;
+    const is2FAEnabled = Boolean(loginInfo?.user?.is2FAEnabled || loginInfo?.user?.twofactorenabled);
+
+    const goAccount = (path) => {
+        onClose();
+        navigate(path);
+    };
 
     const [twoFA, setTwoFA] = useState(is2FAEnabled);
     const [showModal, setShowModal] = useState(false);
@@ -139,9 +174,27 @@ const ProfileDrawerBody = ({ loginInfo, onSignOut, onClose }) => {
             <div className="pd-body">
                 <div className="pd-section">
                     <div className="pd-section-label">Account</div>
-                    <MenuItem icon={<FaUser size={15} />} color="violet" title="My Profile" desc="View & edit your information" />
-                    <MenuItem icon={<FaCog size={15} />} color="slate" title="Account Settings" desc="Preferences & security" />
-                    <MenuItem icon={<FaMobileAlt size={15} />} color="emerald" title="My Devices" desc="Manage logged-in devices" />
+                    <MenuItem
+                        icon={<FaUser size={15} />}
+                        color="violet"
+                        title="My Profile"
+                        desc="View & edit your information"
+                        onClick={() => goAccount('/my-profile')}
+                    />
+                    <MenuItem
+                        icon={<FaCog size={15} />}
+                        color="slate"
+                        title="Account Settings"
+                        desc="Preferences & security"
+                        onClick={() => goAccount('/account-settings')}
+                    />
+                    <MenuItem
+                        icon={<FaMobileAlt size={15} />}
+                        color="emerald"
+                        title="My Devices"
+                        desc="Manage logged-in devices"
+                        onClick={() => goAccount('/my-devices')}
+                    />
                 </div>
 
                 {/* ── Security section with 2FA toggle ── */}
@@ -160,9 +213,28 @@ const ProfileDrawerBody = ({ loginInfo, onSignOut, onClose }) => {
 
                 <div className="pd-section">
                     <div className="pd-section-label">Workspace</div>
-                    <MenuItem icon={<FaChartBar size={15} />} color="amber" title="Activity Log" desc="Your recent actions" />
-                    <MenuItem icon={<FaQuestionCircle size={14} />} color="sky" title="Need Help?" desc="Docs & support center" />
-                    <MenuItem icon={<FaCommentAlt size={14} />} color="violet" title="Send Feedback" desc="Help us improve" badge="New" />
+                    <MenuItem
+                        icon={<FaChartBar size={15} />}
+                        color="amber"
+                        title="Activity Log"
+                        desc="Your recent actions"
+                        onClick={() => goAccount('/workspace/activity')}
+                    />
+                    <MenuItem
+                        icon={<FaQuestionCircle size={14} />}
+                        color="sky"
+                        title="Need Help?"
+                        desc="Docs & support center"
+                        onClick={() => goAccount('/workspace/help')}
+                    />
+                    <MenuItem
+                        icon={<FaCommentAlt size={14} />}
+                        color="violet"
+                        title="Send Feedback"
+                        desc="Help us improve"
+                        badge="New"
+                        onClick={() => goAccount('/workspace/feedback')}
+                    />
                 </div>
             </div>
 

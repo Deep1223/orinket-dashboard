@@ -79,7 +79,7 @@ const FilterRightSidebar = (props) => {
                   );
                 } else if (item.filtertype === 'lookup') {
                   const masterKey = item.storemasterdatabyfield ? item.field : item.masterdata;
-                  const suggestions = (masterdata?.[masterKey] || []).map(m => m.label);
+                  const suggestions = (masterdata?.[masterKey] || []).map((m) => m.label);
                   return (
                     <div className="col-12" key={index}>
                       <div className="d-flex flex-column row-gap-1">
@@ -87,9 +87,9 @@ const FilterRightSidebar = (props) => {
                         <AutoComplete
                           data={suggestions}
                           placeholder={item.filterplaceholder || `Enter ${item.label || item.text}`}
-                          value={filterdata[item.field] || ''}
-                          onChange={(value) => handleFilterData('text', item.field, value)}
+                          defaultValue={filterdata[item.field] || ''}
                           onSelect={(value) => handleFilterData('text', item.field, value)}
+                          onChange={(value) => handleFilterData('text', item.field, value)}
                           id={`filter-${item.field}`}
                           name={item.field}
                           autoComplete="on"

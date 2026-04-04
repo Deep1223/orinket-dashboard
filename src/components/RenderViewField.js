@@ -1,6 +1,6 @@
 'use client';
 
-import {TextRenderField, DropdownRenderField, CheckboxRenderField, TextareaRenderField, HtmlEditorRenderField, DatePickerRenderField, ImageRenderField, MultipleImageRenderField, ColorPickerRenderField, TableAddButtonRenderField, PasswordRenderField, RadioRenderField, DefaultRenderField} from './index';
+import {TextRenderField, DropdownRenderField, CheckboxRenderField, TextareaRenderField, HtmlEditorRenderField, DatePickerRenderField, ImageRenderField, MultipleImageRenderField, ColorPickerRenderField, TableAddButtonRenderField, PasswordRenderField, RadioRenderField, DefaultRenderField, MultiselectPickerRenderField} from './index';
 
 const RenderViewField = (props) => {
   const { field, viewDetails, handlePreview } = props;
@@ -53,6 +53,10 @@ const RenderViewField = (props) => {
 
   if (field.type === 'password') {
     return <PasswordRenderField field={field} viewDetails={viewDetails} />;
+  }
+
+  if (field.type === 'multiselectpicker') {
+    return <MultiselectPickerRenderField field={field} viewDetails={viewDetails} />;
   }
 
   return <DefaultRenderField field={field} viewDetails={viewDetails} />;

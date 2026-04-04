@@ -1,4 +1,4 @@
-import { textField, textareaField, imageField } from '../StorefrontHomeMasters/sharedFields';
+import { textField, textareaField, imageField, numberField } from '../StorefrontHomeMasters/sharedFields';
 
 const StorefrontDiscountBannerMasterJson = [
     {
@@ -13,7 +13,12 @@ const StorefrontDiscountBannerMasterJson = [
             textField('title', 'Title', 'Discount banner', { showingrid: true, sorting: true, required: true }),
             textareaField('description', 'Description', 'Discount banner'),
             textField('cta', 'CTA Text', 'Discount banner'),
-            textField('href', 'CTA Link', 'Discount banner'),
+            numberField('discountUpTo', 'Discount Up To (%)', 'Discount banner', {
+                defaultvalue: 50,
+                required: true,
+                showingrid: true,
+                sorting: true,
+            }),
         ],
     },
 ];

@@ -41,7 +41,7 @@ const groupByDate = (items) => {
 };
 
 // ── Drawer Body (everything inside DrawerRsuite body) ────────────────────────
-const NotificationDrawerBody = ({ notifications, onRead, onMarkAll, onRedirect }) => {
+const NotificationDrawerBody = ({ notifications, onRead, onMarkAll, onNavigateFromNotification }) => {
     const [filter, setFilter] = useState('all');
     const [search, setSearch] = useState('');
 
@@ -57,7 +57,10 @@ const NotificationDrawerBody = ({ notifications, onRead, onMarkAll, onRedirect }
             list = list.filter((n) =>
                 (n.name || '').toLowerCase().includes(q) ||
                 (n.boldTag || '').toLowerCase().includes(q) ||
-                (n.subDesc || '').toLowerCase().includes(q)
+                (n.subDesc || '').toLowerCase().includes(q) ||
+                (n.body || '').toLowerCase().includes(q) ||
+                (n.text || '').toLowerCase().includes(q) ||
+                (n.tag || '').toLowerCase().includes(q)
             );
         }
         return list;
@@ -138,8 +141,14 @@ const NotificationDrawerBody = ({ notifications, onRead, onMarkAll, onRedirect }
                                     <div className="nd-content">
                                         <p className="nd-name">{n.name}</p>
                                         <p className="nd-desc">
-                                            Applied for <strong>{n.boldTag}</strong>
-                                            {n.subDesc ? ` — ${n.subDesc}` : ''}.
+                                            {n.body ? (
+                                                n.body
+                                            ) : (
+                                                <>
+                                                    Applied for <strong>{n.boldTag || 'update'}</strong>
+                                                    {n.subDesc ? ` — ${n.subDesc}` : ''}.
+                                                </>
+                                            )}
                                         </p>
                                         <div className="nd-meta-row">
                                             <span className="badge badge-primary fw-500">{n.tag}</span>
@@ -156,19 +165,22 @@ const NotificationDrawerBody = ({ notifications, onRead, onMarkAll, onRedirect }
                                         >
                                             <CheckIcon />
                                         </button>
-                                        {n.unread && (
-                                            <button
-                                                className="nd-open-btn"
-                                                title="View detail"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
+                                        <button
+                                            type="button"
+                                            className="nd-open-btn"
+                                            title="Open linked screen"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (onNavigateFromNotification) {
+                                                    onNavigateFromNotification(n);
+                                                } else {
                                                     handleClose();
-                                                    navigate(n.redirectPath || '/notifications');
-                                                }}
-                                            >
-                                                <OpenIcon />
-                                            </button>
-                                        )}
+                                                    navigate(n.redirectPath || '/dashboard');
+                                                }
+                                            }}
+                                        >
+                                            <OpenIcon />
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -203,6 +215,7 @@ const NotificationDrawer = (props) => (
                 notifications={props.notifications || []}
                 onRead={props.onRead}
                 onMarkAll={props.onMarkAll}
+                onNavigateFromNotification={props.onNavigateFromNotification}
             />
         }
     />

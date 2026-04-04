@@ -17,12 +17,13 @@ import MenuMaster from '../app/common/MenuMaster/MenuMaster';
 import MenuAssign from '../app/common/MenuAssign/MenuAssign';
 import SeriesAssignMaster from '../app/common/SeriesAssignMaster/SeriesAssignMaster';
 import ProductMaster from '../app/common/ProductMaster/ProductMaster';
+import LowStockThresholdMasterPage from '../pages/LowStockThresholdMasterPage';
+import LowStockProductsMasterPage from '../pages/LowStockProductsMasterPage';
 import SubCategoryMaster from '../app/common/SubCategoryMaster/SubCategoryMaster';
 import GeneralSetting from '../app/common/GeneralSetting/GeneralSetting';
 import StorefrontHomepageMaster from '../app/common/StorefrontHomepageMaster/StorefrontHomepageMaster';
 import StorefrontSectionsMaster from '../app/common/StorefrontSectionsMaster/StorefrontSectionsMaster';
 import StorefrontDemifineMaster from '../app/common/StorefrontDemifineMaster/StorefrontDemifineMaster';
-import StorefrontTopStylesMaster from '../app/common/StorefrontTopStylesMaster/StorefrontTopStylesMaster';
 import StorefrontDiscountBannerMaster from '../app/common/StorefrontDiscountBannerMaster/StorefrontDiscountBannerMaster';
 import StorefrontShopByRecipientMaster from '../app/common/StorefrontShopByRecipientMaster/StorefrontShopByRecipientMaster';
 import StorefrontForEveryYouMaster from '../app/common/StorefrontForEveryYouMaster/StorefrontForEveryYouMaster';
@@ -39,6 +40,12 @@ import CmsContactMaster from '../app/common/CmsSupport/CmsContactMaster';
 import CmsFaqMasterPage from '../pages/CmsFaqMasterPage';
 import CmsShippingMaster from '../app/common/CmsSupport/CmsShippingMaster';
 import CmsReturnsMaster from '../app/common/CmsSupport/CmsReturnsMaster';
+import MyProfilePage from '../pages/account/MyProfilePage';
+import AccountSettingsPage from '../pages/account/AccountSettingsPage';
+import MyDevicesPage from '../pages/account/MyDevicesPage';
+import ActivityLogPage from '../pages/workspace/ActivityLogPage';
+import WorkspaceHelpPage from '../pages/workspace/WorkspaceHelpPage';
+import SendFeedbackPage from '../pages/workspace/SendFeedbackPage';
 
 /* ── Auth routes (no layout) ── */
 export const AUTH_ROUTES = [
@@ -63,12 +70,13 @@ const COMPONENT_BY_PATH = {
     '/citymaster': CityMaster,
     '/statemaster': StateMaster,
     '/productmaster': ProductMaster,
+    '/low-stock-threshold-master': LowStockThresholdMasterPage,
+    '/low-stock-products-master': LowStockProductsMasterPage,
     '/subcategorymaster': SubCategoryMaster,
     '/generalsetting': GeneralSetting,
     '/storefronthomepage': StorefrontHomepageMaster,
     '/storefrontsections': StorefrontSectionsMaster,
     '/demifinemaster': StorefrontDemifineMaster,
-    '/top-styles-master': StorefrontTopStylesMaster,
     '/discount-banner-master': StorefrontDiscountBannerMaster,
     '/shop-by-recipient-master': StorefrontShopByRecipientMaster,
     '/for-every-you-master': StorefrontForEveryYouMaster,
@@ -85,6 +93,12 @@ const COMPONENT_BY_PATH = {
     '/cmsfaq': CmsFaqMasterPage,
     '/cmsshipping': CmsShippingMaster,
     '/cmsreturns': CmsReturnsMaster,
+    '/my-profile': MyProfilePage,
+    '/account-settings': AccountSettingsPage,
+    '/my-devices': MyDevicesPage,
+    '/workspace/activity': ActivityLogPage,
+    '/workspace/help': WorkspaceHelpPage,
+    '/workspace/feedback': SendFeedbackPage,
 };
 
 /* ── Flat app routes ── */

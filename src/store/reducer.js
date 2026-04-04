@@ -26,6 +26,11 @@ const dataSlice = createSlice({
     bulkids: [],
     selectall: false,
     lastEditedDataIndex: -1,
+    /**
+     * When set, Product Master applies this as the grid search once (e.g. from a notification).
+     * Cleared after apply or when dismissed.
+     */
+    pendingProductMasterSearch: null,
   },
   reducers: {
     setBulkAction: (state, action) => { state.bulkaction = action.payload; },
@@ -79,6 +84,14 @@ const dataSlice = createSlice({
         state.data = action.payload.data;
       }
     },
+    setPendingProductMasterSearch: (state, action) => {
+      const v = action.payload;
+      state.pendingProductMasterSearch =
+        v == null || v === '' ? null : String(v).trim() || null;
+    },
+    clearPendingProductMasterSearch: (state) => {
+      state.pendingProductMasterSearch = null;
+    },
   },
 });
 
@@ -93,6 +106,7 @@ export const {
   clearSortData, setFirstErrorTabIndex, setRightSidebarValidationErrors,
   setBulkAction, setBulkIds, setSelectAll, setLastEditedDataIndex,
   setEditeDataIndex, setGridListData,
+  setPendingProductMasterSearch, clearPendingProductMasterSearch,
 } = dataSlice.actions;
 
 export default rootReducer;

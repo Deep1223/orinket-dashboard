@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { setFirstErrorTabIndex } from '../store/reducer';
 import ModalRsuite from './modalrsuite';
@@ -13,7 +13,7 @@ import JoditEditorComponent from './JoditEditor';
 import TextOverflowTitle from './TextOverflowTitle';
 import DocumentPreviewModal from './DocumentPreviewModal';
 import ColorPickerRsuite from './ColorPickerRsuite';
-import { DatePicker } from 'rsuite';
+import { DatePicker, CheckPicker } from 'rsuite';
 import { FiEdit, FiPlus, FiEye, FiEyeOff } from 'react-icons/fi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import apiService from '../utils/apiService';
@@ -32,6 +32,7 @@ const RightSidebar = (props) => {
   const masterdatalist = useAppSelector((s) => s.masterdatalist);
   const firstErrorTabIndex = useAppSelector((s) => s.firstErrorTabIndex);
   const hasMultipleTabs = rightSidebarFormData?.length > 1;
+  const scrollContainerRef = useRef(null);
 
   // Toggle password visibility
   const togglePasswordVisibility = (fieldName) => {
@@ -300,6 +301,35 @@ const RightSidebar = (props) => {
             className={`col-12 h-35p`}
             id={`form-${fields.field}`}
             name={fields.field}
+          />
+        </div>
+      );
+    } else if (fields.type === 'multiselectpicker') {
+      const pickerData =
+        fields.masterdataarray ||
+        masterdata?.[fields.storemasterdatabyfield ? fields.field : fields.masterdata] ||
+        [];
+      const multiVal = Array.isArray(formData[fields.field]) ? formData[fields.field] : [];
+      return (
+        <div
+          className={`form-group validate-input ${fields.required ? 'required-input' : ''}`}
+        >
+          <label className="label-form-control">
+            {fields.text}
+            {fields.required && <span className="text-danger"> * </span>}
+          </label>
+          <CheckPicker
+            container={() => scrollContainerRef.current}
+            data={pickerData}
+            value={multiVal}
+            onChange={(v) => props.handleFormData('multiselectpicker', fields.field, v)}
+            disabled={fields.disabled}
+            placeholder={fields.placeholder || `Select ${fields.text}`}
+            style={{ width: '100%' }}
+            size="md"
+            searchable
+            cleanable
+            id={`form-${fields.field}`}
           />
         </div>
       );
@@ -631,13 +661,26 @@ const RightSidebar = (props) => {
 
         // Clear inputs and remove validation errors for tableFields
         tableFields.forEach(tableField => {
-          props.handleFormData(tableField.type, tableField.field, tableField.defaultvalue || '');
+          const dv =
+            tableField.type === 'checkbox'
+              ? tableField.defaultvalue === 1 || tableField.defaultvalue === true
+                ? 1
+                : 0
+              : tableField.defaultvalue ?? '';
+          if (tableField.type === 'checkbox') {
+            props.handleFormData('checkbox', tableField.field, dv);
+          } else {
+            props.handleFormData(tableField.type, tableField.field, dv);
+          }
           JsCall.hasError(tableField.field, null, 'table-form'); // Use same formName
-          
-          // Manually clear DOM element value because it uses defaultValue
+
           const element = document.getElementById(`table-form-${tableField.field}`);
           if (element) {
-            element.value = tableField.defaultvalue || '';
+            if (tableField.type === 'checkbox') {
+              element.checked = dv === 1;
+            } else {
+              element.value = tableField.defaultvalue ?? '';
+            }
           }
         });
       };
@@ -653,12 +696,24 @@ const RightSidebar = (props) => {
         if (rowToEdit) {
           // 1. Populate table fields with row data
           tableFields.forEach(tableField => {
-            props.handleFormData(tableField.type, tableField.field, rowToEdit[tableField.field]);
-            
-            // Manually update DOM element value
+            let v = rowToEdit[tableField.field];
+            if (tableField.type === 'checkbox') {
+              v = v === true || v === 1 || v === '1' ? 1 : 0;
+              props.handleFormData('checkbox', tableField.field, v);
+            } else {
+              props.handleFormData(tableField.type, tableField.field, v);
+            }
+
             const element = document.getElementById(`table-form-${tableField.field}`);
             if (element) {
-              element.value = rowToEdit[tableField.field] || '';
+              if (tableField.type === 'checkbox') {
+                element.checked = v === 1;
+              } else {
+                element.value =
+                  rowToEdit[tableField.field] !== undefined && rowToEdit[tableField.field] !== null
+                    ? String(rowToEdit[tableField.field])
+                    : '';
+              }
             }
           });
 
@@ -773,6 +828,59 @@ const RightSidebar = (props) => {
                           )}
                         </div>
                       </div>
+                    ) : tableField.type === 'checkbox' ? (
+                      <div className={`form-group mb-3 ${tableField.required ? 'required-input' : ''}`}>
+                        <label className="checkbox checkbox-outline-primary mb-0 d-flex align-items-center">
+                          <input
+                            type="checkbox"
+                            id={`table-form-${tableField.field}`}
+                            checked={
+                              formData[tableField.field] === 1 ||
+                              formData[tableField.field] === true
+                            }
+                            onChange={(e) =>
+                              props.handleFormData(
+                                'checkbox',
+                                tableField.field,
+                                e.target.checked ? 1 : 0
+                              )
+                            }
+                            className="mr-6"
+                            disabled={tableField.disabled}
+                          />
+                          <span>{tableField.text}</span>
+                        </label>
+                      </div>
+                    ) : tableField.type === 'number' ? (
+                      <div className={`form-group validate-input mb-3 ${tableField.required ? 'required-input' : ''}`}>
+                        <label className="label-form-control">
+                          {tableField.text}
+                          {tableField.required && <span className="text-danger"> * </span>}
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id={`table-form-${tableField.field}`}
+                          name={tableField.field}
+                          autoComplete="off"
+                          placeholder={tableField.placeholder || `Enter ${tableField.text}`}
+                          defaultValue={formData[tableField.field]}
+                          inputMode="numeric"
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            e.target.value = value;
+                            JsCall.hasError(tableField.field, null, 'table-form');
+                          }}
+                          onBlur={(e) =>
+                            props.handleFormData(
+                              tableField.type,
+                              tableField.field,
+                              e.target.value
+                            )
+                          }
+                          disabled={tableField.disabled}
+                        />
+                      </div>
                     ) : tableField.type === 'dropdown' ? (
                       <div className={`form-group validate-input mb-3 ${tableField.required ? 'required-input' : ''}`}>
                         <label className="label-form-control">
@@ -872,7 +980,40 @@ const RightSidebar = (props) => {
                   tableData.map((row, rowIndex) => (
                     <tr key={rowIndex} className="align-middle">
                       {tableFields.map((tableField, i) => {
-                        let rawValue = row[tableField.field];
+                        const rawValue = row[tableField.field];
+
+                        if (tableField.type === 'image') {
+                          const src =
+                            rawValue != null && String(rawValue).trim() !== ''
+                              ? String(rawValue).trim()
+                              : '';
+                          return (
+                            <td
+                              key={i}
+                              className={`text-14p py-2 px-3 ${tableField.rightsidebartablesize || 'tbl-w-100p'}`}
+                              style={{ verticalAlign: 'middle' }}
+                            >
+                              {src ? (
+                                <img
+                                  src={src}
+                                  alt=""
+                                  style={{
+                                    maxWidth: 72,
+                                    maxHeight: 54,
+                                    width: 'auto',
+                                    height: 'auto',
+                                    objectFit: 'cover',
+                                    borderRadius: 4,
+                                    display: 'block',
+                                  }}
+                                />
+                              ) : (
+                                <span className="text-muted">—</span>
+                              )}
+                            </td>
+                          );
+                        }
+
                         let displayValue;
                         if (tableField.type === 'file') {
                           displayValue =
@@ -894,7 +1035,13 @@ const RightSidebar = (props) => {
                             item?.[tableField.masterdatafield] ||
                             item?.categoryname ||
                             (rawValue != null && rawValue !== '' ? String(rawValue) : '-');
-                          rawValue = displayValue;
+                        } else if (tableField.type === 'checkbox') {
+                          displayValue =
+                            rawValue === 1 || rawValue === true || rawValue === '1' ? 'Yes' : 'No';
+                        } else if (tableField.type === 'number') {
+                          const n = Number(rawValue);
+                          displayValue =
+                            Number.isFinite(n) && n > 0 ? String(Math.floor(n)) : '—';
                         } else {
                           displayValue = rawValue != null && rawValue !== '' ? rawValue : '-';
                         }

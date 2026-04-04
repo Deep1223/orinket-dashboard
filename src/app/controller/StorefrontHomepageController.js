@@ -15,7 +15,16 @@ import GeneralSettingView from '../common/GeneralSetting/GeneralSettingView';
 const ALIAS = 'generalsetting';
 
 /** Row keys match hero slide schema; these are only UI scratch fields on form root — never send to API. */
-const HERO_TABLE_SCRATCH_KEYS = ['image', 'title', 'subtitle', 'caption', 'cta', 'href'];
+const HERO_TABLE_SCRATCH_KEYS = [
+    'image',
+    'title',
+    'subtitle',
+    'caption',
+    'cta',
+    'buyOneGetOneFree',
+    'discountUpTo',
+    'href',
+];
 
 function sanitizePayload(formData) {
     const o = IISMethods.getcopy(formData);

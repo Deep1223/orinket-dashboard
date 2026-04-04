@@ -57,17 +57,39 @@ const Sidebar = ({ isFixed, setIsFixed }) => {
             <nav className="sidebar-nav">
                 {/* Show only modules from Redux store that have menus */}
                 {reduxModules
-                    .filter(module => module.menus && module.menus.length > 0)
+                    .filter((module) => module.menus && module.menus.length > 0)
                     .map((module) => {
-                        // Accordion for modules with menus
-                        const hasActive = module.menus.some((menu) => 
-                            location.pathname === `/${menu.aliasname}`
+                        const menus = module.menus;
+                        const soleMenu = menus.length === 1 ? menus[0] : null;
+
+                        if (soleMenu) {
+                            return (
+                                <div key={module._id}>
+                                    <NavLink
+                                        to={`/${soleMenu.aliasname}`}
+                                        className={({ isActive }) =>
+                                            `nav-item${isActive ? ' active' : ''}`
+                                        }
+                                        title={!expanded ? module.module : undefined}
+                                    >
+                                        <span className={`nav-item-icon ${expanded ? '' : 'ml-4'}`}>
+                                            <i className={module.icon} style={{ fontSize: '18px' }} />
+                                        </span>
+                                        <span className="nav-item-label">{module.module}</span>
+                                    </NavLink>
+                                </div>
+                            );
+                        }
+
+                        const hasActive = menus.some(
+                            (menu) => location.pathname === `/${menu.aliasname}`
                         );
                         const isGroupOpen = openLabel === module.module;
 
                         return (
                             <div key={module._id}>
                                 <button
+                                    type="button"
                                     className={`accordion-header ${hasActive ? 'has-active' : ''} ${hasActive && !expanded ? 'collapsed-active' : ''}`}
                                     onClick={() => toggleGroup(module.module)}
                                     title={!expanded ? module.module : undefined}
@@ -83,7 +105,7 @@ const Sidebar = ({ isFixed, setIsFixed }) => {
                                 </button>
 
                                 <div className={`accordion-children ${isGroupOpen && expanded ? 'open' : ''}`}>
-                                    {module.menus.map((menu) => {
+                                    {menus.map((menu) => {
                                         return (
                                             <NavLink
                                                 key={menu._id}

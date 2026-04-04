@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { FiTrendingUp, FiShoppingBag, FiAlertTriangle, FiBarChart2 } from 'react-icons/fi';
 import { FLAT_ROUTES_META } from '../config/flatRoutesMeta';
 import Config from '../config/config';
 
-const CHART_HEIGHT = 120;
+const TREND_CHART_HEIGHT = 360;
+const DONUT_CHART_HEIGHT = 400;
+const HBAR_CHART_HEIGHT = 320;
+
+const APEX_PALETTE = ['#008FFB', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#26a69a', '#F43F5E'];
 
 function numberCompact(value) {
   const n = Number(value || 0);
@@ -13,167 +18,318 @@ function numberCompact(value) {
   return `${n}`;
 }
 
-/** 7-day revenue trend — ApexCharts line (sparkline-style, axes hidden). */
-function MiniLineChart({ values, labels = [], color = '#3b82f6', seriesName = 'Revenue' }) {
-  const clean = useMemo(
-    () => (Array.isArray(values) && values.length > 0 ? values.map((v) => Number(v || 0)) : [0]),
-    [values]
-  );
-  const categories = useMemo(() => {
-    if (labels.length === clean.length && labels.length > 0) return labels.map(String);
-    return clean.map((_, i) => String(i + 1));
-  }, [labels, clean]);
+function useTrendData(values, labels) {
+  return useMemo(() => {
+    const clean =
+      Array.isArray(values) && values.length > 0 ? values.map((v) => Number(v || 0)) : [0];
+    const categories =
+      labels.length === clean.length && labels.length > 0
+        ? labels.map(String)
+        : clean.map((_, i) => String(i + 1));
+    return { clean, categories };
+  }, [values, labels]);
+}
+
+/** 7-day revenue — ApexCharts area (axes, grid, smooth fill, tooltips). */
+function RevenueAreaChart({ values, labels = [], color = '#2563eb', seriesName = 'Revenue (Rs)' }) {
+  const { clean, categories } = useTrendData(values, labels);
 
   const options = useMemo(
     () => ({
       chart: {
-        type: 'line',
-        toolbar: { show: false },
-        zoom: { enabled: false },
-        animations: { enabled: true },
+        type: 'area',
+        toolbar: {
+          show: true,
+          tools: {
+            download: true,
+            selection: true,
+            zoom: true,
+            zoomin: true,
+            zoomout: true,
+            pan: true,
+            reset: true,
+          },
+        },
         fontFamily: 'inherit',
-      },
-      stroke: {
-        curve: 'smooth',
-        width: 2.5,
-        colors: [color],
+        zoom: { enabled: true },
       },
       colors: [color],
-      grid: {
-        show: false,
-        padding: { top: 4, right: 8, bottom: 4, left: 8 },
+      stroke: { curve: 'smooth', width: 2 },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.5,
+          opacityTo: 0.06,
+          stops: [0, 92, 100],
+        },
       },
+      dataLabels: { enabled: false },
       xaxis: {
         categories,
-        labels: { show: false },
-        axisBorder: { show: false },
-        axisTicks: { show: false },
-        tooltip: { enabled: false },
+        labels: {
+          style: { fontSize: '11px', colors: '#64748b' },
+          rotate: -35,
+          rotateAlways: categories.some((c) => String(c).length > 10),
+        },
+        axisBorder: { show: true, color: '#e2e8f0' },
+        axisTicks: { show: true, color: '#e2e8f0' },
       },
-      yaxis: { show: false },
-      dataLabels: { enabled: false },
-      markers: {
-        size: 0,
-        strokeWidth: 0,
-        hover: { size: 5, sizeOffset: 0 },
+      yaxis: {
+        labels: {
+          style: { fontSize: '11px', colors: '#64748b' },
+          formatter: (val) => numberCompact(val),
+        },
+      },
+      grid: {
+        borderColor: '#e5e7eb',
+        strokeDashArray: 4,
+        padding: { top: 8, right: 12, bottom: 0, left: 8 },
       },
       tooltip: {
         theme: 'light',
         x: { show: true },
         y: {
-          formatter: (val) => (typeof val === 'number' ? Number(val).toLocaleString() : String(val)),
+          formatter: (val) =>
+            typeof val === 'number' ? `Rs ${Number(val).toLocaleString()}` : String(val),
         },
       },
+      legend: { show: false },
     }),
     [categories, color]
   );
 
   const series = useMemo(() => [{ name: seriesName, data: clean }], [seriesName, clean]);
 
-  return <ReactApexChart options={options} series={series} type="line" height={CHART_HEIGHT} width="100%" />;
-}
-
-function MiniBarChart({ values, color = '#16a34a' }) {
-  const clean = values.map((v) => Number(v || 0));
-  const max = Math.max(1, ...clean);
   return (
-    <div className="d-flex align-items-end gap-1" style={{ height: CHART_HEIGHT }}>
-      {clean.map((v, i) => (
-        <div
-          key={`${i}_${v}`}
-          className="rounded-top"
-          style={{
-            width: `${100 / Math.max(1, clean.length)}%`,
-            height: `${Math.max(6, (v / max) * 100)}%`,
-            background: color,
-            opacity: 0.85,
-          }}
-          title={String(v)}
-        />
-      ))}
+    <div className="dashboard-apex-wrap">
+      <ReactApexChart options={options} series={series} type="area" height={TREND_CHART_HEIGHT} width="100%" />
     </div>
   );
 }
 
-function HorizontalBars({ rows, color = '#4f46e5' }) {
-  const max = Math.max(1, ...rows.map((r) => Number(r.value || 0)));
+/** 7-day orders — ApexCharts column (rounded bars, axes, data labels). */
+function OrdersColumnChart({ values, labels = [], color = '#16a34a', seriesName = 'Orders' }) {
+  const { clean, categories } = useTrendData(values, labels);
+
+  const options = useMemo(
+    () => ({
+      chart: {
+        type: 'bar',
+        toolbar: {
+          show: true,
+          tools: {
+            download: true,
+            selection: true,
+            zoom: true,
+            zoomin: true,
+            zoomout: true,
+            pan: true,
+            reset: true,
+          },
+        },
+        fontFamily: 'inherit',
+      },
+      colors: [color],
+      plotOptions: {
+        bar: {
+          borderRadius: 8,
+          borderRadiusApplication: 'end',
+          columnWidth: '58%',
+          dataLabels: { position: 'top' },
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => (Number(val) > 0 ? Math.round(Number(val)) : ''),
+        offsetY: -22,
+        style: { fontSize: '11px', fontWeight: 600, colors: ['#334155'] },
+      },
+      xaxis: {
+        categories,
+        labels: {
+          style: { fontSize: '11px', colors: '#64748b' },
+          rotate: -35,
+          rotateAlways: categories.some((c) => String(c).length > 10),
+        },
+        axisBorder: { show: true, color: '#e2e8f0' },
+      },
+      yaxis: {
+        labels: {
+          style: { fontSize: '11px', colors: '#64748b' },
+          formatter: (val) => `${Math.round(Number(val))}`,
+        },
+        min: 0,
+        forceNiceScale: true,
+      },
+      grid: { borderColor: '#e5e7eb', strokeDashArray: 4 },
+      tooltip: {
+        y: {
+          formatter: (val) => `${Math.round(Number(val))} orders`,
+        },
+      },
+      legend: { show: false },
+    }),
+    [categories, color]
+  );
+
+  const series = useMemo(() => [{ name: seriesName, data: clean }], [seriesName, clean]);
+
   return (
-    <div className="d-flex flex-column gap-2">
-      {rows.map((row) => (
-        <div key={row.label}>
-          <div className="d-flex justify-content-between small mb-1">
-            <span className="text-truncate pe-2">{row.label}</span>
-            <span>{numberCompact(row.value)}</span>
-          </div>
-          <div className="progress" style={{ height: 8 }}>
-            <div
-              className="progress-bar"
-              style={{
-                width: `${Math.max(4, (Number(row.value || 0) / max) * 100)}%`,
-                backgroundColor: color,
-              }}
-            />
-          </div>
-        </div>
-      ))}
+    <div className="dashboard-apex-wrap">
+      <ReactApexChart options={options} series={series} type="bar" height={TREND_CHART_HEIGHT} width="100%" />
     </div>
   );
 }
 
-function DonutChart({ rows }) {
-  const total = Math.max(1, rows.reduce((sum, r) => sum + Number(r.value || 0), 0));
-  const palette = ['#3b82f6', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#14b8a6', '#f43f5e'];
-  let cursor = 0;
-  const segments = rows.map((r, i) => {
-    const start = cursor;
-    const share = (Number(r.value || 0) / total) * 100;
-    cursor += share;
-    return {
-      ...r,
-      color: palette[i % palette.length],
-      start,
-      end: cursor,
-    };
-  });
-  const gradient = segments
-    .map((s) => `${s.color} ${s.start.toFixed(2)}% ${s.end.toFixed(2)}%`)
-    .join(', ');
+/** Horizontal bar chart — optional per-row colors (e.g. stock health). */
+function HorizontalBarChart({ rows, color = '#7c3aed', barColors }) {
+  const categories = useMemo(() => rows.map((r) => r.label), [rows]);
+  const data = useMemo(() => rows.map((r) => Number(r.value || 0)), [rows]);
+  const distributed = Array.isArray(barColors) && barColors.length >= rows.length;
+
+  const options = useMemo(
+    () => ({
+      chart: {
+        type: 'bar',
+        toolbar: { show: false },
+        fontFamily: 'inherit',
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+          distributed,
+          borderRadius: 6,
+          barHeight: '72%',
+          dataLabels: { position: 'center' },
+        },
+      },
+      colors: distributed ? barColors : [color],
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => (Number(val) > 0 ? numberCompact(val) : ''),
+        style: { fontSize: '11px', fontWeight: 600, colors: distributed ? ['#fff'] : ['#fff'] },
+      },
+      xaxis: {
+        categories,
+        labels: {
+          style: { fontSize: '12px', colors: '#475569' },
+          formatter: (val) => numberCompact(val),
+        },
+      },
+      yaxis: {
+        labels: {
+          style: { fontSize: '12px', colors: '#334155' },
+          maxWidth: 320,
+        },
+      },
+      grid: { borderColor: '#e5e7eb', strokeDashArray: 4, xaxis: { lines: { show: true } } },
+      tooltip: {
+        y: {
+          formatter: (val) => numberCompact(val),
+        },
+      },
+      legend: { show: false },
+    }),
+    [categories, color, barColors, distributed]
+  );
+
+  const series = useMemo(() => [{ name: 'Count', data }], [data]);
+
   return (
-    <div className="d-flex gap-3 align-items-center">
-      <div
-        style={{
-          width: 140,
-          height: 140,
-          borderRadius: '50%',
-          background: `conic-gradient(${gradient || '#e5e7eb 0% 100%'})`,
-          position: 'relative',
-          flexShrink: 0,
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            width: 74,
-            height: 74,
-            borderRadius: '50%',
-            background: '#fff',
-            inset: '50%',
-            transform: 'translate(-50%, -50%)',
-            border: '1px solid #e5e7eb',
-          }}
-        />
-      </div>
-      <div className="flex-grow-1">
-        {segments.map((s) => (
-          <div key={s.label} className="d-flex justify-content-between align-items-center small mb-1">
-            <span className="d-flex align-items-center gap-2">
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: s.color }} />
-              <span>{s.label}</span>
-            </span>
-            <span className="text-muted">{Math.round((Number(s.value || 0) / total) * 100)}%</span>
-          </div>
-        ))}
-      </div>
+    <div className="dashboard-apex-wrap">
+      <ReactApexChart options={options} series={series} type="bar" height={HBAR_CHART_HEIGHT} width="100%" />
+    </div>
+  );
+}
+
+/** Catalog / mode mix — ApexCharts donut with legend and center total. */
+function DonutChart({ rows, centerLabel = 'Total' }) {
+  const series = useMemo(() => rows.map((r) => Number(r.value || 0)), [rows]);
+  const labels = useMemo(() => rows.map((r) => r.label), [rows]);
+  const colors = useMemo(
+    () => rows.map((_, i) => APEX_PALETTE[i % APEX_PALETTE.length]),
+    [rows]
+  );
+
+  const options = useMemo(
+    () => ({
+      chart: {
+        type: 'donut',
+        fontFamily: 'inherit',
+      },
+      labels,
+      colors,
+      stroke: { width: 2, colors: ['#fff'] },
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => `${Number(val).toFixed(0)}%`,
+        style: { fontSize: '11px', fontWeight: 700, colors: ['#fff'] },
+        dropShadow: { enabled: false },
+      },
+      plotOptions: {
+        pie: {
+          expandOnClick: true,
+          donut: {
+            size: '62%',
+            labels: {
+              show: true,
+              name: { show: true, fontSize: '13px', color: '#64748b' },
+              value: {
+                show: true,
+                fontSize: '22px',
+                fontWeight: 600,
+                color: '#0f172a',
+                formatter: (val) => String(val),
+              },
+              total: {
+                show: true,
+                showAlways: true,
+                label: centerLabel,
+                fontSize: '12px',
+                color: '#64748b',
+                formatter: (w) => {
+                  const t = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                  return t % 1 === 0 ? String(t) : t.toFixed(1);
+                },
+              },
+            },
+          },
+        },
+      },
+      legend: {
+        position: 'bottom',
+        horizontalAlign: 'center',
+        fontSize: '12px',
+        fontWeight: 500,
+        markers: { width: 10, height: 10, radius: 10 },
+        itemMargin: { horizontal: 10, vertical: 6 },
+      },
+      tooltip: {
+        fillSeriesColor: true,
+        y: {
+          formatter: (val) => `${numberCompact(val)} units`,
+        },
+      },
+      responsive: [
+        {
+          breakpoint: 576,
+          options: {
+            plotOptions: { pie: { donut: { labels: { name: { fontSize: '11px' } } } } },
+          },
+        },
+      ],
+    }),
+    [labels, colors, centerLabel]
+  );
+
+  if (!rows.length || series.every((s) => s === 0)) {
+    return <p className="small text-muted mb-0">No data to display.</p>;
+  }
+
+  return (
+    <div className="dashboard-apex-wrap">
+      <ReactApexChart options={options} series={series} type="donut" height={DONUT_CHART_HEIGHT} width="100%" />
     </div>
   );
 }
@@ -200,6 +356,16 @@ const GUIDE_CARDS = [
     hint: 'Photos, prices, categories, and “Available qty” — customers can only buy what you allow.',
   },
   {
+    path: '/low-stock-threshold-master',
+    title: 'Low stock threshold',
+    hint: 'Set the unit cutoff for low-stock KPI, digest notifications, and Product Master alerts.',
+  },
+  {
+    path: '/low-stock-products-master',
+    title: 'Low Stock Master',
+    hint: 'See every storefront SKU below the threshold and update stock counts in one place.',
+  },
+  {
     path: '/category',
     title: 'Categories',
     hint: 'Organise how products appear in the shop menu and filters.',
@@ -224,6 +390,7 @@ const Dashboard = () => {
     totalSales: 0,
     totalOrders: 0,
     lowStockCount: 0,
+    lowStockThreshold: 5,
     topProducts: [],
     analyticsLast7Days: [],
     tooltip: 'Based on last 7 days sales',
@@ -246,6 +413,7 @@ const Dashboard = () => {
             totalSales: json.data.totalSales || 0,
             totalOrders: json.data.totalOrders || 0,
             lowStockCount: json.data.lowStockCount || 0,
+            lowStockThreshold: json.data.lowStockThreshold ?? 5,
             topProducts: json.data.topProducts || [],
             analyticsLast7Days: json.data.analyticsLast7Days || [],
             tooltip: json.data.tooltip || 'Based on last 7 days sales',
@@ -374,143 +542,230 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-vh-100 p-4">
-      <div className="row g-4">
+    <div className="dashboard-home">
+      <header className="dashboard-hero dashboard-hero--premium mb-4 mb-xl-5">
+        <div className="dashboard-hero-inner">
+          <div className="dashboard-hero-accent" aria-hidden />
+          <div className="dashboard-hero-copy">
+            <p className="dashboard-eyebrow mb-2">Command center</p>
+            <h1 className="dashboard-hero-title">Overview</h1>
+            <p className="dashboard-hero-lead mb-0">
+              Sales, inventory, and storefront at a glance — refined for clarity and fast decisions.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <div className="row g-4 dashboard-home-row">
         <div className="col-12">
-          <div className="row g-3">
+          <div className="row g-3 g-xl-4">
             <div className="col-md-4">
-              <div className="bg-white rounded-custom-lg shadow-custom p-3 h-100">
-                <div className="small text-muted">Total Sales</div>
-                <div className="h4 fw-semibold mb-0">Rs {Number(summary.totalSales || 0).toLocaleString()}</div>
-                <div className="small text-muted">{summary.tooltip}</div>
+              <div className="dashboard-kpi dashboard-kpi--sales h-100">
+                <div className="dashboard-kpi-icon" aria-hidden>
+                  <FiTrendingUp size={22} />
+                </div>
+                <div className="dashboard-kpi-label">Total sales</div>
+                <div className="dashboard-kpi-value">Rs {Number(summary.totalSales || 0).toLocaleString()}</div>
+                <div className="dashboard-kpi-foot">{summary.tooltip}</div>
               </div>
             </div>
             <div className="col-md-4">
-              <div className="bg-white rounded-custom-lg shadow-custom p-3 h-100">
-                <div className="small text-muted">Orders</div>
-                <div className="h4 fw-semibold mb-0">{summary.totalOrders}</div>
-                <div className="small text-muted">Auto-calculated</div>
+              <div className="dashboard-kpi dashboard-kpi--orders h-100">
+                <div className="dashboard-kpi-icon" aria-hidden>
+                  <FiShoppingBag size={22} />
+                </div>
+                <div className="dashboard-kpi-label">Orders</div>
+                <div className="dashboard-kpi-value">{summary.totalOrders}</div>
+                <div className="dashboard-kpi-foot">Auto-calculated from fulfilled orders</div>
               </div>
             </div>
             <div className="col-md-4">
-              <div className="bg-white rounded-custom-lg shadow-custom p-3 h-100">
-                <div className="small text-muted">Low Stock Alerts</div>
-                <div className={`h4 fw-semibold mb-0 ${stockState}`}>{summary.lowStockCount}</div>
-                <div className="small text-muted">Green/Yellow/Red traffic light logic</div>
+              <div className="dashboard-kpi dashboard-kpi--stock h-100">
+                <div className="dashboard-kpi-icon" aria-hidden>
+                  <FiAlertTriangle size={22} />
+                </div>
+                <div className="dashboard-kpi-label">Low stock alerts</div>
+                <div className={`dashboard-kpi-value ${stockState}`}>{summary.lowStockCount}</div>
+                <div className="dashboard-kpi-foot">
+                  Storefront SKUs with stock &lt; {summary.lowStockThreshold}.{' '}
+                  <Link to="/low-stock-products-master" className="text-decoration-none">
+                    View list
+                  </Link>
+                  {' · '}
+                  <Link to="/low-stock-threshold-master" className="text-decoration-none">
+                    Edit threshold
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="col-12">
-          <div className="bg-white rounded-custom-lg shadow-custom p-4">
-            <h2 className="h6 fw-semibold text-dark mb-3">Top products</h2>
+          <section className="dashboard-panel">
+            <div className="dashboard-panel-head">
+              <div className="d-flex align-items-start gap-3">
+                <div className="dashboard-panel-icon">
+                  <FiBarChart2 size={20} />
+                </div>
+                <div>
+                  <h2 className="dashboard-panel-title mb-1">Top products</h2>
+                  <p className="dashboard-panel-desc mb-0">Best performers by units sold</p>
+                </div>
+              </div>
+            </div>
             {summary.topProducts.length > 0 ? (
-              <div className="row g-2">
+              <div className="row g-3">
                 {summary.topProducts.map((p) => (
                   <div key={p.id} className="col-md-6 col-xl-4">
-                    <div className="border rounded-3 p-3 h-100">
-                      <div className="fw-semibold">{p.name}</div>
-                      <div className="small text-muted">Sold: {p.soldUnits} | Stock: {p.stock}</div>
+                    <div className="dashboard-mini-tile h-100">
+                      <div className="dashboard-mini-tile-title">{p.name}</div>
+                      <div className="dashboard-mini-tile-meta">
+                        Sold {p.soldUnits} · Stock {p.stock}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="small text-muted mb-0">No analytics yet. Run `npm run seed:ecom` in backend first.</p>
+              <p className="dashboard-empty mb-0">No analytics yet. Run <code>npm run seed:ecom</code> in the backend first.</p>
             )}
-          </div>
+          </section>
         </div>
 
         <div className="col-12">
-          <div className="row g-3">
-            <div className="col-xl-6">
-              <div className="bg-white rounded-custom-lg shadow-custom p-4 h-100">
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <h3 className="h6 fw-semibold mb-0">Revenue trend (7 days)</h3>
-                  <span className="small text-muted">Auto</span>
-                </div>
-                <MiniLineChart
-                  values={trendRows.map((d) => d.revenue)}
-                  labels={trendRows.map((d) => d.date)}
-                  color="#2563eb"
-                  seriesName="Revenue (Rs)"
-                />
-                <div className="d-flex justify-content-between small text-muted mt-2">
-                  <span>{trendRows[0]?.date || ''}</span>
-                  <span>{trendRows[trendRows.length - 1]?.date || ''}</span>
-                </div>
+          <section className="dashboard-panel dashboard-panel--chart">
+            <div className="dashboard-chart-head">
+              <div>
+                <p className="dashboard-eyebrow mb-1">Performance</p>
+                <h3 className="dashboard-chart-title mb-1">Revenue trend</h3>
+                <p className="dashboard-chart-desc mb-0">Last 7 days · rolling window</p>
               </div>
+              <span className="dashboard-pill">Auto</span>
             </div>
-            <div className="col-xl-6">
-              <div className="bg-white rounded-custom-lg shadow-custom p-4 h-100">
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <h3 className="h6 fw-semibold mb-0">Orders trend (7 days)</h3>
-                  <span className="small text-muted">Auto</span>
-                </div>
-                <MiniBarChart values={trendRows.map((d) => d.orders)} color="#16a34a" />
-                <div className="d-flex justify-content-between small text-muted mt-2">
-                  <span>{trendRows[0]?.date || ''}</span>
-                  <span>{trendRows[trendRows.length - 1]?.date || ''}</span>
-                </div>
-              </div>
+            <RevenueAreaChart
+              values={trendRows.map((d) => d.revenue)}
+              labels={trendRows.map((d) => d.date)}
+              color="#1d4ed8"
+              seriesName="Revenue (Rs)"
+            />
+            <div className="dashboard-chart-foot">
+              <span>{trendRows[0]?.date || ''}</span>
+              <span className="text-muted">—</span>
+              <span>{trendRows[trendRows.length - 1]?.date || ''}</span>
             </div>
-            <div className="col-xl-6">
-              <div className="bg-white rounded-custom-lg shadow-custom p-4 h-100">
-                <h3 className="h6 fw-semibold mb-3">Catalog category mix</h3>
-                {categoryMix.length > 0 ? (
-                  <DonutChart rows={categoryMix} />
-                ) : (
-                  <p className="small text-muted mb-0">No category data available yet.</p>
-                )}
-              </div>
-            </div>
-            <div className="col-xl-6">
-              <div className="bg-white rounded-custom-lg shadow-custom p-4 h-100">
-                <h3 className="h6 fw-semibold mb-3">Stock health distribution</h3>
-                <HorizontalBars rows={stockHealthRows} color="#f59e0b" />
-              </div>
-            </div>
-            <div className="col-xl-6">
-              <div className="bg-white rounded-custom-lg shadow-custom p-4 h-100">
-                <h3 className="h6 fw-semibold mb-3">Top products by sold units</h3>
-                <HorizontalBars
-                  rows={(summary.topProducts || []).slice(0, 6).map((p) => ({
-                    label: p.name,
-                    value: p.soldUnits || 0,
-                  }))}
-                  color="#7c3aed"
-                />
-              </div>
-            </div>
-            <div className="col-xl-6">
-              <div className="bg-white rounded-custom-lg shadow-custom p-4 h-100">
-                <h3 className="h6 fw-semibold mb-3">Storefront mode split</h3>
-                <DonutChart rows={sectionModeRows} />
-              </div>
-            </div>
-          </div>
+          </section>
         </div>
 
         <div className="col-12">
-          <div className="bg-white rounded-custom-lg shadow-custom p-4">
-            <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-              <h2 className="h6 fw-semibold text-dark mb-0">Storefront control (AUTO / CUSTOM)</h2>
-              <span className="small text-muted">Tooltip: Based on last 7 days sales</span>
+          <section className="dashboard-panel dashboard-panel--chart">
+            <div className="dashboard-chart-head">
+              <div>
+                <p className="dashboard-eyebrow mb-1">Performance</p>
+                <h3 className="dashboard-chart-title mb-1">Orders trend</h3>
+                <p className="dashboard-chart-desc mb-0">Last 7 days · order volume</p>
+              </div>
+              <span className="dashboard-pill">Auto</span>
             </div>
-            {saveMessage ? <p className="small text-success mb-3">{saveMessage}</p> : null}
+            <OrdersColumnChart
+              values={trendRows.map((d) => d.orders)}
+              labels={trendRows.map((d) => d.date)}
+              color="#059669"
+              seriesName="Orders"
+            />
+            <div className="dashboard-chart-foot">
+              <span>{trendRows[0]?.date || ''}</span>
+              <span className="text-muted">—</span>
+              <span>{trendRows[trendRows.length - 1]?.date || ''}</span>
+            </div>
+          </section>
+        </div>
+
+        <div className="col-12">
+          <section className="dashboard-panel dashboard-panel--chart">
+            <div className="dashboard-chart-head">
+              <div>
+                <p className="dashboard-eyebrow mb-1">Catalog</p>
+                <h3 className="dashboard-chart-title mb-1">Category mix</h3>
+                <p className="dashboard-chart-desc mb-0">Share of products by category</p>
+              </div>
+            </div>
+            {categoryMix.length > 0 ? (
+              <DonutChart rows={categoryMix} centerLabel="Products" />
+            ) : (
+              <p className="dashboard-empty mb-0">No category data available yet.</p>
+            )}
+          </section>
+        </div>
+
+        <div className="col-12">
+          <section className="dashboard-panel dashboard-panel--chart">
+            <div className="dashboard-chart-head">
+              <div>
+                <p className="dashboard-eyebrow mb-1">Inventory</p>
+                <h3 className="dashboard-chart-title mb-1">Stock health</h3>
+                <p className="dashboard-chart-desc mb-0">Healthy, low, and out of stock counts</p>
+              </div>
+            </div>
+            <HorizontalBarChart
+              rows={stockHealthRows}
+              barColors={['#16a34a', '#ea580c', '#dc2626']}
+            />
+          </section>
+        </div>
+
+        <div className="col-12">
+          <section className="dashboard-panel dashboard-panel--chart">
+            <div className="dashboard-chart-head">
+              <div>
+                <p className="dashboard-eyebrow mb-1">Sales depth</p>
+                <h3 className="dashboard-chart-title mb-1">Top products by sold units</h3>
+                <p className="dashboard-chart-desc mb-0">Up to six leaders from analytics</p>
+              </div>
+            </div>
+            <HorizontalBarChart
+              rows={(summary.topProducts || []).slice(0, 6).map((p) => ({
+                label: p.name,
+                value: p.soldUnits || 0,
+              }))}
+              color="#6d28d9"
+            />
+          </section>
+        </div>
+
+        <div className="col-12">
+          <section className="dashboard-panel dashboard-panel--chart">
+            <div className="dashboard-chart-head">
+              <div>
+                <p className="dashboard-eyebrow mb-1">Storefront</p>
+                <h3 className="dashboard-chart-title mb-1">Section mode split</h3>
+                <p className="dashboard-chart-desc mb-0">AUTO vs CUSTOM configuration</p>
+              </div>
+            </div>
+            <DonutChart rows={sectionModeRows} centerLabel="Sections" />
+          </section>
+        </div>
+
+        <div className="col-12">
+          <section className="dashboard-panel">
+            <div className="dashboard-panel-head">
+              <div>
+                <h2 className="dashboard-panel-title mb-1">Storefront control</h2>
+                <p className="dashboard-panel-desc mb-0">AUTO / CUSTOM · tooltip: last 7 days sales</p>
+              </div>
+            </div>
+            {saveMessage ? <p className="small text-success mb-3 mb-md-4">{saveMessage}</p> : null}
             {sectionsLoading ? (
-              <p className="small text-muted mb-0">Loading section controls...</p>
+              <p className="dashboard-empty mb-0">Loading section controls…</p>
             ) : (
               <div className="row g-3">
                 {sections.map((s) => (
-                  <div key={s.key} className="col-md-6">
-                    <div className="border rounded-3 p-3 h-100">
-                      <div className="d-flex align-items-center justify-content-between mb-2">
-                        <div className="fw-semibold text-capitalize">{s.key}</div>
+                  <div key={s.key} className="col-md-6 col-xl-4">
+                    <div className="dashboard-nested-card h-100">
+                      <div className="d-flex align-items-center justify-content-between mb-3">
+                        <div className="fw-semibold text-capitalize dashboard-nested-title">{s.key}</div>
                         <select
-                          className="form-select form-select-sm"
-                          style={{ maxWidth: 150 }}
+                          className="form-select form-select-sm dashboard-select"
                           value={s.mode}
                           onChange={(e) => updateSectionField(s.key, { mode: e.target.value })}
                         >
@@ -519,9 +774,9 @@ const Dashboard = () => {
                         </select>
                       </div>
                       <div className="mb-2">
-                        <label className="form-label small text-muted mb-1">Pinned product IDs (comma separated)</label>
+                        <label className="form-label small dashboard-label mb-1">Pinned product IDs (comma separated)</label>
                         <input
-                          className="form-control form-control-sm"
+                          className="form-control form-control-sm dashboard-input"
                           placeholder="prodId1,prodId2"
                           value={(s.products || []).join(',')}
                           onChange={(e) =>
@@ -535,9 +790,9 @@ const Dashboard = () => {
                         />
                       </div>
                       <div className="mb-2">
-                        <label className="form-label small text-muted mb-1">Hidden product IDs</label>
+                        <label className="form-label small dashboard-label mb-1">Hidden product IDs</label>
                         <input
-                          className="form-control form-control-sm"
+                          className="form-control form-control-sm dashboard-input"
                           placeholder="prodId3,prodId4"
                           value={(s.hiddenProducts || []).join(',')}
                           onChange={(e) =>
@@ -551,14 +806,14 @@ const Dashboard = () => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="form-label small text-muted mb-1">Tooltip text</label>
+                        <label className="form-label small dashboard-label mb-1">Tooltip text</label>
                         <input
-                          className="form-control form-control-sm"
+                          className="form-control form-control-sm dashboard-input"
                           value={s.tooltip || ''}
                           onChange={(e) => updateSectionField(s.key, { tooltip: e.target.value })}
                         />
                       </div>
-                      <button className="btn btn-dark btn-sm w-100" onClick={() => saveSection(s)}>
+                      <button type="button" className="btn dashboard-btn-save w-100" onClick={() => saveSection(s)}>
                         Save {s.key}
                       </button>
                     </div>
@@ -566,48 +821,7 @@ const Dashboard = () => {
                 ))}
               </div>
             )}
-          </div>
-        </div>
-
-        <div className="col-12">
-          <div className="bg-white rounded-custom-lg shadow-custom p-4 p-md-5">
-            <h1 className="h4 fw-semibold text-dark mb-2">Welcome to your admin</h1>
-            <p className="text-muted mb-0" style={{ maxWidth: '42rem' }}>
-              Use the sidebar to open each master. Below are the most important screens for running your shop — open
-              them in order once if you are new here.
-            </p>
-          </div>
-        </div>
-
-        <div className="col-12">
-          <h2 className="h6 fw-semibold text-dark mb-3 border-bottom pb-2">Start here</h2>
-          <div className="row g-3">
-            {GUIDE_CARDS.map((c) => (
-              <div key={c.path} className="col-md-6 col-xl-4">
-                <Link
-                  to={c.path}
-                  className="text-decoration-none d-block h-100 rounded-3 border p-4 bg-white shadow-sm hover-shadow transition"
-                >
-                  <div className="fw-semibold text-dark mb-2">{c.title}</div>
-                  <p className="small text-muted mb-0">{c.hint}</p>
-                  <span className="small text-primary mt-2 d-inline-block">Open →</span>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="col-12">
-          <h2 className="h6 fw-semibold text-dark mb-3 border-bottom pb-2">All masters in this app</h2>
-          <div className="row g-2">
-            {masterRoutes.map((r) => (
-              <div key={r.path} className="col-sm-6 col-md-4 col-lg-3">
-                <Link to={r.path} className="btn btn-outline-secondary btn-sm w-100 text-start text-truncate">
-                  {r.label}
-                </Link>
-              </div>
-            ))}
-          </div>
+          </section>
         </div>
       </div>
     </div>

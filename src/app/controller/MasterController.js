@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import IISMethods from '../../utils/IISMethods';
 import { setProps, getCurrentState, getSortData } from '../../utils/reduxUtils';
 import { store } from '../../store/store';
-import { clearFormData, setGridListData } from '../../store/reducer';
+import { clearFormData, setGridListData, clearPendingProductMasterSearch } from '../../store/reducer';
 import MasterView from '../common/MasterView';
 import { useAppSelector } from '../../store/hooks';
 import JsCall from '../../utils/JsCall';
@@ -18,7 +18,10 @@ const MasterController = () => {
   const isMounted = useRef(false);
   const abortControllerRef = useRef(null);
   const lastAliasRef = useRef(null);
+  const getlistRef = useRef(null);
   const location = useLocation();
+
+  const pendingProductMasterSearch = useAppSelector((s) => s.pendingProductMasterSearch);
 
   const masterdatalist = useAppSelector((s) => s.masterdatalist); // Add masterdata selector
   const masterdata = useAppSelector((s) => s.masterdata); // Add masterdata selector
@@ -118,6 +121,26 @@ const MasterController = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run when alias changes; getmasterdata/getlist omitted to avoid loops
   }, [sidebarAlias, expectedAlias]);
+
+  useEffect(() => {
+    if (!isMounted.current) return;
+    if (location.pathname !== '/productmaster') return;
+    if (!pendingProductMasterSearch) return;
+    if (sidebarAlias !== 'productmaster') return;
+
+    const q = pendingProductMasterSearch;
+    store.dispatch(clearPendingProductMasterSearch());
+    const st = getCurrentState();
+    const fd = IISMethods.getcopy(st.filterdata) || {};
+    const ofd = IISMethods.getcopy(st.oldfilterdata) || {};
+    setProps({
+      filterdata: { ...fd, searchbar: q },
+      oldfilterdata: { ...ofd, searchbar: q },
+      pageno: 1,
+    });
+    getlistRef.current?.('productmaster');
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- apply once when pending queue + PM grid is ready
+  }, [location.pathname, sidebarAlias, pendingProductMasterSearch]);
 
   const printSelectPicker = (item, fields) => {
     if (fields.field === 'iconid') {
@@ -269,6 +292,9 @@ const MasterController = () => {
             else if (fields.type === 'tbl-add-button') {
               formData[fields.field] = fields.defaultvalue || [];
             }
+            else if (fields.type === 'multiselectpicker') {
+              formData[fields.field] = Array.isArray(fields.defaultvalue) ? fields.defaultvalue : [];
+            }
             else {
               formData[fields.field] = fields.defaultvalue;
             }
@@ -412,6 +438,8 @@ const MasterController = () => {
       formData[key] = value ? new Date(value.toString()).toISOString() : '';
     } else if (type === 'multipleimage') {
       formData[key] = IISMethods.normalizeImageList(value);
+    } else if (type === 'multiselectpicker') {
+      formData[key] = Array.isArray(value) ? value : [];
     } else {
       // Handle text, email, password, number, url, tel, color and other basic types
       formData[key] = value;
@@ -622,6 +650,8 @@ const MasterController = () => {
       }
     }
   };
+
+  getlistRef.current = getlist;
 
   const handlesort = (field, order) => {
     setProps({

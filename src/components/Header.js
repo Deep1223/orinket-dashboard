@@ -1,5 +1,5 @@
 // src/components/Header.jsx
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BiSearch, BiBell } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -11,6 +11,15 @@ import NotificationDrawer from './NotificationDrawer';
 import { MdApps } from 'react-icons/md';
 import useAuth from '../hooks/useAuth';
 import { useAppSelector } from '../store/hooks';
+import StorageService from '../utils/StorageService';
+import { navigateFromNotification } from '../utils/notificationNavigation';
+
+function notificationFetchHeaders() {
+    const headers = { Accept: 'application/json' };
+    const token = StorageService.getToken();
+    if (token) headers.Authorization = `Bearer ${token}`;
+    return headers;
+}
 
 // ── Build flat searchable menu list ─────────────────────────────────────────
 const buildSearchList = (loginInfo) => {
@@ -49,15 +58,6 @@ const Highlight = ({ text, query }) => {
         </span>
     );
 };
-
-// ── Dummy notification data (replace with API) ───────────────────────────────
-const DUMMY_NOTIFICATIONS = [
-    { id: 1, unread: true, initials: 'NP', boldName: 'UAT – Nilesh Patil', name: 'UAT – Nilesh Patil', text: 'UAT – Nilesh Patil applied for profile update', boldTag: 'profile update', subDesc: 'pending admin approval', tag: 'Profile Update', sender: 'UAT Admin', time: 'Today at 6:51 PM', dateGroup: 'Today', color: 'linear-gradient(135deg,#6366f1,#818cf8)' },
-    { id: 2, unread: true, initials: 'AR', boldName: 'Aditya Rohit Pai', name: 'Aditya Rohit Pai', text: 'Aditya Rohit Pai applied for profile update', boldTag: 'profile update', subDesc: 'waiting for review', tag: 'Profile Update', sender: 'UAT Admin', time: 'Today at 6:20 PM', dateGroup: 'Today', color: 'linear-gradient(135deg,#8b5cf6,#a78bfa)' },
-    { id: 3, unread: true, initials: 'AR', boldName: 'Aditya Rohit Pai', name: 'Aditya Rohit Pai', text: 'Aditya Rohit Pai applied for profile update', boldTag: 'profile update', subDesc: 'duplicate request flagged', tag: 'Profile Update', sender: 'UAT Admin', time: 'Today at 5:59 PM', dateGroup: 'Today', color: 'linear-gradient(135deg,#8b5cf6,#a78bfa)' },
-    { id: 4, unread: false, initials: 'AR', boldName: 'Aditya Rohit Pai', name: 'Aditya Rohit Pai', text: 'Aditya Rohit Pai applied for profile update', boldTag: 'profile update', subDesc: '', tag: 'Profile Update', sender: 'UAT Admin', time: 'Today at 5:57 PM', dateGroup: 'Today', color: 'linear-gradient(135deg,#d1d5db,#9ca3af)' },
-    { id: 5, unread: true, initials: 'SK', boldName: 'Suresh Kumar', name: 'Suresh Kumar', text: 'Suresh Kumar applied for profile update', boldTag: 'profile update', subDesc: 'awaiting verification', tag: 'Profile Update', sender: 'UAT Admin', time: 'Yesterday at 3:10 PM', dateGroup: 'Yesterday', color: 'linear-gradient(135deg,#f59e0b,#fbbf24)' },
-];
 
 // ── SVG icons ────────────────────────────────────────────────────────────────
 const CheckIcon = () => (
@@ -114,7 +114,17 @@ const NotificationBody = (props) => {
     return (
         <div className="notif-ib-list">
             {visible.map((n) => {
-                const afterBold = n.text.replace(n.boldName, '');
+                const line =
+                    n.boldName && n.text && n.text.startsWith(n.boldName)
+                        ? (
+                            <>
+                                <strong>{n.boldName}</strong>
+                                {n.text.slice(n.boldName.length)}
+                            </>
+                        )
+                        : (
+                            <span>{n.text || n.name || n.boldName}</span>
+                        );
                 return (
                     <div key={n.id} className={`notif-ib-item${n.unread ? ' notif-ib-item--unread' : ''}`}>
 
@@ -135,7 +145,7 @@ const NotificationBody = (props) => {
                         {/* Text + meta */}
                         <div className="notif-ib-content">
                             <p className={`notif-ib-text${!n.unread ? ' notif-ib-text--read' : ''}`}>
-                                <strong>{n.boldName}</strong>{afterBold}
+                                {line}
                             </p>
                             <div className="notif-ib-meta">
                                 {n.sender}&nbsp;·&nbsp;{n.time}
@@ -145,21 +155,28 @@ const NotificationBody = (props) => {
                         {/* Action buttons */}
                         <div className="notif-ib-actions">
                             {n.unread ? (
-                                <>
-                                    <button
-                                        className="notif-ib-action-btn"
-                                        title="Mark as read"
-                                        onClick={(e) => { e.stopPropagation(); props.onRead(n.id); }}
-                                    ><CheckIcon /></button>
-                                    <button className="notif-ib-action-btn" title="Open">
-                                        <OpenIcon />
-                                    </button>
-                                </>
+                                <button
+                                    type="button"
+                                    className="notif-ib-action-btn"
+                                    title="Mark as read"
+                                    onClick={(e) => { e.stopPropagation(); props.onRead(n.id); }}
+                                ><CheckIcon /></button>
                             ) : (
-                                <button className="notif-ib-action-btn notif-ib-action-btn--done" title="Read">
+                                <button type="button" className="notif-ib-action-btn notif-ib-action-btn--done" title="Read">
                                     <CheckIcon />
                                 </button>
                             )}
+                            <button
+                                type="button"
+                                className="notif-ib-action-btn"
+                                title="Open linked screen"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    props.onOpen?.(n);
+                                }}
+                            >
+                                <OpenIcon />
+                            </button>
                         </div>
                     </div>
                 );
@@ -188,7 +205,7 @@ const Header = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeIndex, setActiveIndex] = useState(-1);
     const [notifOpen, setNotifOpen] = useState(false);
-    const [notifications, setNotifications] = useState(DUMMY_NOTIFICATIONS);
+    const [notifications, setNotifications] = useState([]);
     const [notifFilter, setNotifFilter] = useState('all');
 
     const searchRef = useRef(null);
@@ -233,9 +250,60 @@ const Header = () => {
 
     const handleSelect = (path) => { navigate(path); setIsSearchOpen(false); setSearchQuery(''); };
 
+    const loadNotifications = useCallback(async () => {
+        try {
+            const res = await fetch(`${Config.apiBaseUrl}/notifications`, {
+                credentials: 'include',
+                headers: notificationFetchHeaders(),
+            });
+            const json = await res.json();
+            if (json?.success && Array.isArray(json.data)) {
+                setNotifications(json.data);
+            }
+        } catch (_err) {
+            /* keep list as-is on failure */
+        }
+    }, []);
+
+    useEffect(() => {
+        loadNotifications();
+    }, [loadNotifications]);
+
+    useEffect(() => {
+        if (notifOpen) loadNotifications();
+    }, [notifOpen, loadNotifications]);
+
     const unreadCount = notifications.filter((n) => n.unread).length;
-    const handleMarkRead = (id) => setNotifications((prev) => prev.map((n) => n.id === id ? { ...n, unread: false } : n));
-    const handleMarkAll = () => setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+
+    const handleMarkRead = async (id) => {
+        try {
+            const res = await fetch(`${Config.apiBaseUrl}/notifications/${id}/read`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: notificationFetchHeaders(),
+            });
+            if (res.ok) {
+                setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, unread: false } : n)));
+            }
+        } catch (_err) {
+            setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, unread: false } : n)));
+        }
+    };
+
+    const handleMarkAll = async () => {
+        try {
+            const res = await fetch(`${Config.apiBaseUrl}/notifications/mark-all-read`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: notificationFetchHeaders(),
+            });
+            if (res.ok) {
+                setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+            }
+        } catch (_err) {
+            setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+        }
+    };
 
     const userName = loginInfo?.user?.firstName || loginInfo?.user?.firstname || loginInfo?.user?.email || Config.guestUser;
     const userInitial = userName.charAt(0).toUpperCase();
@@ -352,6 +420,11 @@ const Header = () => {
                 notifications={notifications}
                 onRead={handleMarkRead}
                 onMarkAll={handleMarkAll}
+                onNavigateFromNotification={(n) => {
+                    navigateFromNotification(navigate, n, {
+                        onClose: () => IISMethods.handleGrid(false, 'notificationdrawer', 0),
+                    });
+                }}
             />
 
             {/* ── Notification InfoBox ── */}
@@ -375,6 +448,7 @@ const Header = () => {
                         notifications={notifications}
                         filter={notifFilter}
                         onRead={handleMarkRead}
+                        onOpen={(n) => navigateFromNotification(navigate, n, { onClose: () => setNotifOpen(false) })}
                     />
                 }
                 footer={
