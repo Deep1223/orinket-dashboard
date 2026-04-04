@@ -12,6 +12,7 @@ import MenuAssignJson from '../app/common/MenuAssign/MenuAssignMasterJson';
 import SeriesAssignJson from '../app/common/SeriesAssignMaster/SeriesAssignMasterJson';
 import ProductMasterJson from '../app/common/ProductMaster/ProductMasterJson';
 import SubCategoryMasterJson from '../app/common/SubCategoryMaster/SubCategoryMasterJson';
+import OccasionMasterJson from '../app/common/OccasionMaster/OccasionMasterJson';
 import GeneralSettingMasterJson from '../app/common/GeneralSetting/GeneralSettingMasterJson';
 import StorefrontHomepageMasterJson from '../app/common/StorefrontHomepageMaster/StorefrontHomepageMasterJson';
 import StorefrontDemifineMasterJson from '../app/common/StorefrontDemifineMaster/StorefrontDemifineMasterJson';
@@ -62,6 +63,8 @@ const MasterJson = (type) => {
       return ProductMasterJson;
     case 'subcategorymaster':
       return SubCategoryMasterJson;
+    case 'occasionmaster':
+      return OccasionMasterJson;
     case 'generalsetting':
       return GeneralSettingMasterJson;
     case 'storefronthomepage':

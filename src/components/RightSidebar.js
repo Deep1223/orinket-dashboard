@@ -1101,7 +1101,13 @@ const RightSidebar = (props) => {
       if (fields.istablefield) return;
       if (!isFieldVisible(fields)) return;
 
-      const st = typeof fields.sectionTitle === 'string' ? fields.sectionTitle.trim() : '';
+      // Force disable fields if it's default data
+      const fieldsCopy = { ...fields };
+      if (formData.defaultdata === true) {
+        fieldsCopy.disabled = true;
+      }
+
+      const st = typeof fieldsCopy.sectionTitle === 'string' ? fieldsCopy.sectionTitle.trim() : '';
       if (st) {
         if (st !== prevSectionTitle) {
           prevSectionTitle = st;
@@ -1120,8 +1126,8 @@ const RightSidebar = (props) => {
       }
 
       nodes.push(
-        <div key={fields.field || `${keyPrefix}-f-${index}`} className={`${fields.size}`}>
-          {renderFieldByType(fields)}
+        <div key={fieldsCopy.field || `${keyPrefix}-f-${index}`} className={`${fieldsCopy.size}`}>
+          {renderFieldByType(fieldsCopy)}
         </div>
       );
     });
@@ -1170,16 +1176,18 @@ const RightSidebar = (props) => {
           }
           footer={
             <div className="d-flex gap-10">
-              <button className="btn btn-primary" onClick={() => props.handleAddButtonClick(hasMultipleTabs ? activeTabIndex : undefined)}>
-                Save
-              </button>
+              {!formData.defaultdata && (
+                <button className="btn btn-primary" onClick={() => props.handleAddButtonClick(hasMultipleTabs ? activeTabIndex : undefined)}>
+                  Save
+                </button>
+              )}
               <button
                 className="btn btn-secondary"
                 onClick={() => {
                   IISMethods.handleGrid(false, 'rightsidebar', 0);
                 }}
               >
-                Cancel
+                {formData.defaultdata ? 'Close' : 'Cancel'}
               </button>
             </div>
           }

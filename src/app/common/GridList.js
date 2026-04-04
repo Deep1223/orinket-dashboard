@@ -32,29 +32,33 @@ const ThreeDotMenu = (props) => {
       onMouseEnter={(e) => e.stopPropagation()}
       onMouseLeave={(e) => e.stopPropagation()}
     >
-        <button
-          className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
-          onClick={async () => {
-            await props.setFormData(props.data._id);
-            props.setDropdownOpen(null);
-          }}
-        >
-          <FaRegEdit /> Edit
-        </button>
+      {!props.data.defaultdata && (
+        <>
+          <button
+            className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
+            onClick={async () => {
+              await props.setFormData(props.data._id);
+              props.setDropdownOpen(null);
+            }}
+          >
+            <FaRegEdit /> Edit
+          </button>
 
-        <button
-          className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
-          onClick={async () => {
-            props.setDeleteDetails(props.data);
-            IISMethods.handleGrid(true, 'deletemodal', 1);
-            props.setDropdownOpen(null);
-          }}
-        >
-          <RiDeleteBin6Line /> Delete
-        </button>
+          <button
+            className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
+            onClick={async () => {
+              props.setDeleteDetails(props.data);
+              IISMethods.handleGrid(true, 'deletemodal', 1);
+              props.setDropdownOpen(null);
+            }}
+          >
+            <RiDeleteBin6Line /> Delete
+          </button>
+        </>
+      )}
 
-        <button
-          className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
+      <button
+        className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
           onClick={async () => {
             props.setViewDetails(props.data);
             props.setDropdownOpen(null);

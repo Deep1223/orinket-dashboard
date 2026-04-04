@@ -30,6 +30,7 @@ export const FLAT_ROUTES_META = [
         showInSidebar: true,
     },
     { path: '/subcategorymaster', pageKey: 'subcategorymaster', label: 'Sub Category Master', showInSidebar: true },
+    { path: '/occasionmaster', pageKey: 'occasionmaster', label: 'Occasion Master', showInSidebar: true },
     { path: '/generalsetting', pageKey: 'generalsetting', label: 'General Settings', showInSidebar: true },
     { path: '/storefronthomepage', pageKey: 'storefronthomepage', label: 'Storefront homepage', showInSidebar: true },
     { path: '/storefrontsections', pageKey: 'storefrontsections', label: 'Storefront sections', showInSidebar: true },

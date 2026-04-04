@@ -20,6 +20,7 @@ import ProductMaster from '../app/common/ProductMaster/ProductMaster';
 import LowStockThresholdMasterPage from '../pages/LowStockThresholdMasterPage';
 import LowStockProductsMasterPage from '../pages/LowStockProductsMasterPage';
 import SubCategoryMaster from '../app/common/SubCategoryMaster/SubCategoryMaster';
+import OccasionMaster from '../app/common/OccasionMaster/OccasionMaster';
 import GeneralSetting from '../app/common/GeneralSetting/GeneralSetting';
 import StorefrontHomepageMaster from '../app/common/StorefrontHomepageMaster/StorefrontHomepageMaster';
 import StorefrontSectionsMaster from '../app/common/StorefrontSectionsMaster/StorefrontSectionsMaster';
@@ -73,6 +74,7 @@ const COMPONENT_BY_PATH = {
     '/low-stock-threshold-master': LowStockThresholdMasterPage,
     '/low-stock-products-master': LowStockProductsMasterPage,
     '/subcategorymaster': SubCategoryMaster,
+    '/occasionmaster': OccasionMaster,
     '/generalsetting': GeneralSetting,
     '/storefronthomepage': StorefrontHomepageMaster,
     '/storefrontsections': StorefrontSectionsMaster,

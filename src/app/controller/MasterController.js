@@ -116,6 +116,14 @@ const MasterController = () => {
           ) {
             getmasterdata(1, field);
           }
+          if (
+            field.type === 'multiselectpicker' &&
+            field.masterdata &&
+            !field.masterdataarray &&
+            field.masterdata !== aliasName
+          ) {
+            getmasterdata(1, field);
+          }
         });
       });
     }
@@ -264,6 +272,9 @@ const MasterController = () => {
       const data = IISMethods.getObjectfromArray(getCurrentState().data, '_id', id);
       formData = IISMethods.getcopy(data);
       IISMethods.normalizeMultiImageFieldsInForm(formData, getCurrentState().rightsidebarformdata);
+      if (Array.isArray(formData.occasionids)) {
+        formData.occasionids = formData.occasionids.map((x) => String(x));
+      }
       // Find the index of the data being edited
       editedIndex = getCurrentState().data.findIndex(item => item._id === id);
       setProps({ lastEditedDataIndex: editedIndex });
@@ -333,6 +344,9 @@ const MasterController = () => {
               getmasterdata(1, fields);
             }
           }
+          if (fields.type === 'multiselectpicker' && fields.masterdata && !fields.masterdataarray) {
+            getmasterdata(1, fields);
+          }
         });
       }
     });
@@ -356,6 +370,8 @@ const MasterController = () => {
             } else if (field.type === 'tbl-add-button') {
               formData[field.field] = [];
             } else if (field.type === 'multipleimage') {
+              formData[field.field] = [];
+            } else if (field.type === 'multiselectpicker') {
               formData[field.field] = [];
             } else {
               formData[field.field] = '';
@@ -386,7 +402,7 @@ const MasterController = () => {
 
         if (formfield?.masterdataarray) {
           formData[formfield?.formdatafield + 'id'] = value ? value : '';
-          formData[formfield?.formdatafield] = value ? IISMethods.getObjectfromArray(formfield?.masterdata[formfield?.storemasterdatabyfield ? formfield?.field : formfield?.masterdata], 'value', value)?.name : '';
+          formData[formfield?.formdatafield] = value ? IISMethods.getObjectfromArray(formfield?.masterdataarray, 'value', value)?.label : '';
         }
         else {
           if (formfield?.field === 'iconid') {

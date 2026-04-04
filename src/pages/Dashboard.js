@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { FiTrendingUp, FiShoppingBag, FiAlertTriangle, FiBarChart2 } from 'react-icons/fi';
-import { FLAT_ROUTES_META } from '../config/flatRoutesMeta';
 import Config from '../config/config';
 
 const TREND_CHART_HEIGHT = 360;
@@ -334,55 +333,6 @@ function DonutChart({ rows, centerLabel = 'Total' }) {
   );
 }
 
-const GUIDE_CARDS = [
-  {
-    path: '/generalsetting',
-    title: 'Store details & settings',
-    hint: 'Name, contact, banners, footer links, SEO, payments — core store configuration.',
-  },
-  {
-    path: '/storefronthomepage',
-    title: 'Storefront homepage',
-    hint: 'Hero banner slides and optional JSON for homepage and policy-page blocks.',
-  },
-  {
-    path: '/storefrontsections',
-    title: 'Storefront sections',
-    hint: 'Section-wise JSON blocks for home and inner pages (blog, stores, careers, support pages).',
-  },
-  {
-    path: '/productmaster',
-    title: 'Products & stock',
-    hint: 'Photos, prices, categories, and “Available qty” — customers can only buy what you allow.',
-  },
-  {
-    path: '/low-stock-threshold-master',
-    title: 'Low stock threshold',
-    hint: 'Set the unit cutoff for low-stock KPI, digest notifications, and Product Master alerts.',
-  },
-  {
-    path: '/low-stock-products-master',
-    title: 'Low Stock Master',
-    hint: 'See every storefront SKU below the threshold and update stock counts in one place.',
-  },
-  {
-    path: '/category',
-    title: 'Categories',
-    hint: 'Organise how products appear in the shop menu and filters.',
-  },
-  {
-    path: '/subcategorymaster',
-    title: 'Subcategories',
-    hint: 'Finer grouping under each category.',
-  },
-  {
-    path: '/countrymaster',
-    title: 'Countries & currency',
-    hint: 'Used with default currency in General Settings.',
-  },
-];
-
-const masterRoutes = FLAT_ROUTES_META.filter((r) => r.pageKey && r.showInSidebar !== false);
 const STOREFRONT_KEYS = ['top-styles', 'trending', 'recommended', 'new-arrivals'];
 
 const Dashboard = () => {

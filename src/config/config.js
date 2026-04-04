@@ -532,6 +532,13 @@ const Config = {
     { label: 'Other', value: '65f1a2b3c4d5e6f7890a1b2e' },
   ],
 
+  // Product Gender Options
+  productGenderOptions: [
+    { label: 'Man', value: 'Man' },
+    { label: 'Woman', value: 'Woman' },
+    { label: 'Both', value: 'Both' },
+  ],
+
   // Role options for User Master
   roleOptions: [
     { label: 'Administrator', value: '69ac79c8afeebd98e398c0ff' },
