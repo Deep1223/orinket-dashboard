@@ -112,9 +112,11 @@ class ApiService {
       'Content-Type': 'application/json',
       ...options.headers,
     };
-    
-    // Authorization header is no longer needed as we use HttpOnly cookies.
-    // The browser automatically attaches 'token' cookie if credentials: 'include'.
+
+    const bearer = StorageService.getToken();
+    if (bearer && !headers.Authorization) {
+      headers.Authorization = `Bearer ${bearer}`;
+    }
 
     try {
       const response = await fetch(url, {

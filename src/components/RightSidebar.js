@@ -635,6 +635,15 @@ const RightSidebar = (props) => {
     else if (fields.type === 'tbl-add-button') {
       const tableData = formData[fields.field] || [];
       const tableFields = rightSidebarFormData?.[activeTabIndex]?.fields.filter(f => fields.tablefields.includes(f.field)) || [];
+      const getTableRowValue = (row, tableField) => {
+        const direct = row?.[tableField.field];
+        if (direct !== undefined && direct !== null && direct !== '') return direct;
+        // Backward compatibility for old shopWithConfidence row shape.
+        if (tableField.field === 'featureTitle') return row?.title ?? '';
+        if (tableField.field === 'featureDescription') return row?.description ?? '';
+        if (tableField.field === 'featureThreshold') return row?.freeShippingThresholdInr ?? '';
+        return direct;
+      };
 
       const handleAddRow = () => {
         // Use JsCall.ValidateForm with a custom formName to trigger validation for tableFields
@@ -696,7 +705,7 @@ const RightSidebar = (props) => {
         if (rowToEdit) {
           // 1. Populate table fields with row data
           tableFields.forEach(tableField => {
-            let v = rowToEdit[tableField.field];
+            let v = getTableRowValue(rowToEdit, tableField);
             if (tableField.type === 'checkbox') {
               v = v === true || v === 1 || v === '1' ? 1 : 0;
               props.handleFormData('checkbox', tableField.field, v);
@@ -710,8 +719,8 @@ const RightSidebar = (props) => {
                 element.checked = v === 1;
               } else {
                 element.value =
-                  rowToEdit[tableField.field] !== undefined && rowToEdit[tableField.field] !== null
-                    ? String(rowToEdit[tableField.field])
+                  v !== undefined && v !== null
+                    ? String(v)
                     : '';
               }
             }
@@ -744,7 +753,9 @@ const RightSidebar = (props) => {
                           placeholder={tableField.placeholder || `Enter ${tableField.text}`}
                           defaultValue={formData[tableField.field]}
                           onChange={(e) => {
-                            checkValidation(tableField.field, e.target.value);
+                            const value = e.target.value;
+                            checkValidation(tableField.field, value);
+                            props.handleFormData(tableField.type, tableField.field, value);
                             // Also clear specific table-form error styling on change
                             JsCall.hasError(tableField.field, null, 'table-form');
                           }}
@@ -869,6 +880,7 @@ const RightSidebar = (props) => {
                           onChange={(e) => {
                             const value = e.target.value.replace(/[^0-9]/g, '');
                             e.target.value = value;
+                            props.handleFormData(tableField.type, tableField.field, value);
                             JsCall.hasError(tableField.field, null, 'table-form');
                           }}
                           onBlur={(e) =>
@@ -980,7 +992,7 @@ const RightSidebar = (props) => {
                   tableData.map((row, rowIndex) => (
                     <tr key={rowIndex} className="align-middle">
                       {tableFields.map((tableField, i) => {
-                        const rawValue = row[tableField.field];
+                        const rawValue = getTableRowValue(row, tableField);
 
                         if (tableField.type === 'image') {
                           const src =

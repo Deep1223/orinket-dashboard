@@ -3,7 +3,7 @@ import { textField, textareaField, imageField } from '../StorefrontHomeMasters/s
 const StorefrontDeserveToShineMasterJson = [
     {
         tabname: 'Deserve to shine',
-        pagename: 'Storefront Deserve To Shine Master',
+        pagename: 'Deserve To Shine Master',
         aliasname: 'storefrontdeservetoshinemaster',
         rightsidebarsize: 'lg',
         fields: [

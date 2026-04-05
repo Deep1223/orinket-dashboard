@@ -3,17 +3,17 @@ import { textField, textareaField, imageField } from '../StorefrontHomeMasters/s
 const StorefrontFounderMessageMasterJson = [
     {
         tabname: 'Founder message',
-        pagename: 'Storefront Founder Message Master',
+        pagename: 'Founder Master',
         aliasname: 'storefrontfoundermessagemaster',
         rightsidebarsize: 'lg',
         fields: [
-            textField('title', 'Title', 'Founder message', { showingrid: true, sorting: true, required: true }),
-            textareaField('quote', 'Quote', 'Founder message'),
-            textareaField('description', 'Description', 'Founder message'),
-            textField('name', 'Founder Name', 'Founder message'),
-            textField('role', 'Role', 'Founder message'),
-            imageField('image', 'Founder Image', 'Founder message'),
-            textField('alt', 'Image Alt', 'Founder message'),
+            textField('title', 'Title', { showingrid: true, sorting: true, required: true }),
+            textareaField('quote', 'Quote'),
+            textareaField('description', 'Description'),
+            textField('name', 'Founder Name'),
+            textField('role', 'Role'),
+            imageField('image', 'Founder Image'),
+            textField('alt', 'Image Alt'),
         ],
     },
 ];

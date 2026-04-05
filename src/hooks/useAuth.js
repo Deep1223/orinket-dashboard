@@ -16,11 +16,11 @@ const useAuth = () => {
   const loginInfo = useAppSelector((state) => state.logininfo);
 
   const login = useCallback(async (authData) => {
-    const { user, rememberMe } = authData;
-    
+    const { user, rememberMe, token } = authData;
+
     // Set email cookie for config API
     setCookie(Config.emailCookieKey, user.email);
-    
+
     const loginData = {
       user: {
         ...user,
@@ -28,6 +28,7 @@ const useAuth = () => {
       },
       isAuthenticated: true,
       loginTime: new Date().toISOString(),
+      ...(token ? { token } : {}),
     };
 
     if (rememberMe) {
@@ -35,8 +36,9 @@ const useAuth = () => {
     } else {
       StorageService.clearRememberedEmail();
     }
-    
-    StorageService.setLoginInfoCookie(loginData);
+
+    const { token: _omitToken, ...loginInfoForCookie } = loginData;
+    StorageService.setLoginInfoCookie(loginInfoForCookie);
     setProps({ logininfo: loginData });
     
     // Call config API immediately after login
@@ -47,15 +49,17 @@ const useAuth = () => {
       });
       
       if (configResponse.data && configResponse.success) {
-        
-        // Merge config data into logininfo
         const updatedLoginInfo = {
           ...loginData,
-          ...configResponse.data
+          ...configResponse.data,
         };
-        
+        if (token) {
+          updatedLoginInfo.token = token;
+        }
+
         setProps({ logininfo: updatedLoginInfo });
-        StorageService.setLoginInfoCookie(updatedLoginInfo);
+        const { token: _t, ...forCookie } = updatedLoginInfo;
+        StorageService.setLoginInfoCookie(forCookie);
       }
     } catch (error) {
       console.error('Error fetching config after login:', error);

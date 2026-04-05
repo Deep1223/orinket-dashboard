@@ -189,6 +189,7 @@ const Login = () => {
           role: user.role,
         },
         rememberMe,
+        token: result.token,
       });
 
     } catch (error) {
@@ -318,6 +319,7 @@ const Login = () => {
             role: user.role,
           },
           rememberMe,
+          token: result.token,
         });
       } else {
         IISMethods.errormsg(result.message || 'Invalid 2FA code', 1);

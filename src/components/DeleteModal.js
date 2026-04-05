@@ -6,7 +6,6 @@ import Modal from './modalrsuite';
 import IISMethods from '../utils/IISMethods';
 import Config from '../config/config';
 import { useAppSelector } from '../store/hooks';
-import { getCurrentState } from '../utils/reduxUtils';
 
 const DeleteModal = (props) => {
   const [stage, setStage] = useState(1);
@@ -16,6 +15,7 @@ const DeleteModal = (props) => {
 
   const bulkaction = useAppSelector((state) => state.bulkaction);
   const bulkids = useAppSelector((state) => state.bulkids);
+  const isDeleteModalOpen = useAppSelector((state) => state.modal?.deletemodal);
 
   const isBulkDelete = Array.isArray(props.deleteDetails) || (bulkaction === 'deleteaction' && (bulkids?.length > 0));
 
@@ -40,7 +40,7 @@ const DeleteModal = (props) => {
 
   return (
     <Modal
-      open={getCurrentState().modal?.deletemodal}
+      open={isDeleteModalOpen}
       onClose={handleDeleteClose}
       title={
         <div className="d-flex align-items-center">

@@ -32,7 +32,7 @@ const ThreeDotMenu = (props) => {
       onMouseEnter={(e) => e.stopPropagation()}
       onMouseLeave={(e) => e.stopPropagation()}
     >
-      {!props.data.defaultdata && (
+      {!props.readOnly && !props.data.defaultdata && (
         <>
           <button
             className="dropdown-item d-flex align-items-center gap-2 py-2 border-bottom"
@@ -85,6 +85,7 @@ const ThreeDotMenu = (props) => {
 const GridList = (props) => {
   const pagename = useAppSelector((state) => state.pagename);
   const rightSidebarData = useAppSelector((state) => state.rightsidebarformdata);
+  const isReadOnly = Boolean(rightSidebarData?.[0]?.readonly);
   const data = useAppSelector((state) => state.data);
   const loading = useAppSelector((state) => state.loading);
   const pagelimit = useAppSelector((state) => state.pagelimit);
@@ -356,6 +357,7 @@ const GridList = (props) => {
                                 setDeleteDetails={props.setDeleteDetails}
                                 setViewInfoData={props.setViewInfoData}
                                 pageKey={rightSidebarData?.[0]?.aliasname}
+                                readOnly={isReadOnly}
                               />
                             )}
                           </td>

@@ -18,6 +18,7 @@ import FilteredDataBadge from '../../components/FilteredDataBadge';
 const MasterView = (props) => {
   const rightSidebarData = useAppSelector((state) => state.rightsidebarformdata);
   const filterData = useAppSelector((state) => state.filterdata);
+  const isReadOnly = Boolean(rightSidebarData?.[0]?.readonly);
 
   const [viewDetails, setViewDetails] = useState({});
   const [deleteDetails, setDeleteDetails] = useState({});
@@ -47,7 +48,7 @@ const MasterView = (props) => {
         <h1 className="h4 fw-medium text-dark">{rightSidebarData?.[0]?.pagename}</h1>
         <div className="d-flex align-items-center gap-2">
           <div className="d-flex align-items-center gap-1">
-              {bulkaction === 'deleteaction' ? (
+              {isReadOnly ? null : bulkaction === 'deleteaction' ? (
                 <>
                   <button
                     className="btn btn-danger py-4p px-9p d-flex align-items-center h-38p shadow-sm"
@@ -85,14 +86,16 @@ const MasterView = (props) => {
             searchTerm={searchTerm}
             setSearchTerm={handleSetSearchTerm}
           />
-          <button
-            className="btn btn-primary"
-            onClick={async () => {
-              await props.setFormData();
-            }}
-          >
-            {Config.createbtn}
-          </button>
+          {!isReadOnly && (
+            <button
+              className="btn btn-primary"
+              onClick={async () => {
+                await props.setFormData();
+              }}
+            >
+              {Config.createbtn}
+            </button>
+          )}
           <div>
             <button
               className="btn btn-primary py-4p px-9p d-flex align-items-center"

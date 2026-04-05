@@ -8,7 +8,7 @@ const GeneralSettingView = ({ formKey, handleAddButtonClick, handleFormData, onR
   const showShimmer = loading?.showgridlistshimmer;
 
   return (
-    <div className="general-setting-page container-fluid py-3 px-2 px-sm-3 flex-grow-1 min-h-0 d-flex flex-column w-100">
+    <div className="general-setting-page container-fluid flex-grow-1 min-h-0 d-flex flex-column w-100 p-0">
       <div className="flex-grow-1 min-h-0 d-flex flex-column general-setting-page-inner w-100">
         {showShimmer ? (
           <div className="d-flex align-items-center justify-content-center py-5 text-muted flex-grow-1">
