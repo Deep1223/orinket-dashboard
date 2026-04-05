@@ -8,6 +8,7 @@ const orinketHomePageSectionOptions = [
     { label: 'Trending Products', value: 'trendingProducts' },
     { label: 'Recommended Products', value: 'recommendedProducts' },
     { label: 'Fine gold Products', value: 'fineGoldProducts' },
+    { label: '925 SILVER POST', value: 'showIn925SilverPost' },
 ];
 
 export default orinketHomePageSectionOptions;
