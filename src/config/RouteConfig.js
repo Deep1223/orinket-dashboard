@@ -35,6 +35,7 @@ import StorefrontBlogSectionMaster from '../app/common/StorefrontBlogSectionMast
 import StorefrontShopWithConfidenceMaster from '../app/common/StorefrontShopWithConfidenceMaster/StorefrontShopWithConfidenceMaster';
 import StorefrontBrandStoryMaster from '../app/common/StorefrontBrandStoryMaster/StorefrontBrandStoryMaster';
 import StorefrontReviewsMaster from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMaster';
+import SpinLogMaster from '../app/common/SpinLogMaster/SpinLogMaster';
 import StorefrontCtaBannerMaster from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMaster';
 import StorefrontVisitStoresMaster from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMaster';
 import CmsContactMaster from '../app/common/CmsSupport/CmsContactMaster';
@@ -89,6 +90,7 @@ const COMPONENT_BY_PATH = {
     '/shop-with-confidence-master': StorefrontShopWithConfidenceMaster,
     '/brand-story-master': StorefrontBrandStoryMaster,
     '/reviews-master': StorefrontReviewsMaster,
+    '/spinlogmaster': SpinLogMaster,
     '/cta-banner-master': StorefrontCtaBannerMaster,
     '/visit-stores-master': StorefrontVisitStoresMaster,
     '/cmscontact': CmsContactMaster,

@@ -26,6 +26,7 @@ import StorefrontBlogSectionMasterJson from '../app/common/StorefrontBlogSection
 import StorefrontShopWithConfidenceMasterJson from '../app/common/StorefrontShopWithConfidenceMaster/StorefrontShopWithConfidenceMasterJson';
 import StorefrontBrandStoryMasterJson from '../app/common/StorefrontBrandStoryMaster/StorefrontBrandStoryMasterJson';
 import StorefrontReviewsMasterJson from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMasterJson';
+import SpinLogMasterJson from '../app/common/SpinLogMaster/SpinLogMasterJson';
 import StorefrontCtaBannerMasterJson from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMasterJson';
 import StorefrontVisitStoresMasterJson from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMasterJson';
 import CmsContactMasterJson from '../app/common/CmsSupport/CmsContactMasterJson';
@@ -91,6 +92,8 @@ const MasterJson = (type) => {
       return StorefrontBrandStoryMasterJson;
     case 'storefrontreviewsmaster':
       return StorefrontReviewsMasterJson;
+    case 'spinlogmaster':
+      return SpinLogMasterJson;
     case 'storefrontctabannermaster':
       return StorefrontCtaBannerMasterJson;
     case 'storefrontvisitstoresmaster':

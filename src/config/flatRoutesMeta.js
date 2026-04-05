@@ -45,6 +45,7 @@ export const FLAT_ROUTES_META = [
     { path: '/shop-with-confidence-master', pageKey: 'storefrontshopwithconfidencemaster', label: 'Storefront Shop With Confidence', showInSidebar: true },
     { path: '/brand-story-master', pageKey: 'storefrontbrandstorymaster', label: 'Storefront Brand Story', showInSidebar: true },
     { path: '/reviews-master', pageKey: 'storefrontreviewsmaster', label: 'Storefront Reviews', showInSidebar: true },
+    { path: '/spinlogmaster', pageKey: 'spinlogmaster', label: 'Spin logs', showInSidebar: true },
     { path: '/cta-banner-master', pageKey: 'storefrontctabannermaster', label: 'Storefront CTA Banner', showInSidebar: true },
     { path: '/visit-stores-master', pageKey: 'storefrontvisitstoresmaster', label: 'Storefront Visit Stores', showInSidebar: true },
     { path: '/cmscontact', pageKey: 'cmscontact', label: 'Contact page', showInSidebar: true },
