@@ -203,6 +203,13 @@ const GeneralSettingController = () => {
 
   const applyLoadedRecord = (row) => {
     let formData = IISMethods.getcopy(row);
+    const spinRaw = formData.spin_popup_frequency_days;
+    if (spinRaw === undefined || spinRaw === null || spinRaw === '') {
+      formData.spin_popup_frequency_days = '1';
+    } else {
+      const n = Math.max(1, Math.floor(Number(spinRaw) || 1));
+      formData.spin_popup_frequency_days = String(n);
+    }
     IISMethods.normalizeMultiImageFieldsInForm(formData, getCurrentState().rightsidebarformdata);
     store.dispatch(clearFormData());
     setProps({ formdata: formData });
@@ -212,6 +219,18 @@ const GeneralSettingController = () => {
   const loadSingleSetting = async () => {
     setProps({ loading: { showgridlistshimmer: true } });
     try {
+      let settingsSpin = null;
+      try {
+        const settingsRes = await ApiService.get('/settings');
+        const raw = settingsRes?.data?.data?.spin_popup_frequency_days;
+        const n = Number(raw);
+        if (settingsRes?.success && Number.isFinite(n) && n >= 1) {
+          settingsSpin = Math.floor(n);
+        }
+      } catch {
+        /* legacy Settings doc optional */
+      }
+
       const result = await ApiService.read(ALIAS, {
         pagination: { page: 1, limit: 1 },
         sort: { field: 'createdAt', order: -1 },
@@ -220,7 +239,15 @@ const GeneralSettingController = () => {
       if (!isMounted.current) return;
 
       if (result.success && result.data?.length) {
-        applyLoadedRecord(result.data[0]);
+        const row = { ...result.data[0] };
+        const hasSpin =
+          row.spin_popup_frequency_days != null &&
+          row.spin_popup_frequency_days !== '' &&
+          Number(row.spin_popup_frequency_days) >= 1;
+        if (!hasSpin && settingsSpin != null) {
+          row.spin_popup_frequency_days = settingsSpin;
+        }
+        applyLoadedRecord(row);
       } else {
         const empty = buildEmptyFormFromConfig();
         store.dispatch(clearFormData());

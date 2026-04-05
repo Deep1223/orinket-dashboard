@@ -13,6 +13,17 @@ const GeneralSettingMasterJson = [
         rightsidebarsize: 'lg',
         fields: [
             {
+                field: 'spin_popup_frequency_days',
+                text: 'Spin Popup Frequency (in days)',
+                type: 'number',
+                required: false,
+                sectionTitle: 'Spin to win',
+                size: 'col-12 col-md-6',
+                defaultvalue: '1',
+                placeholder: '1 = daily, 3 = every 3 days',
+                ...grid(true, 'tbl-w-160p', false),
+            },
+            {
                 field: 'storeName',
                 text: 'Store Name',
                 type: 'text',
