@@ -41,6 +41,14 @@ const Highlight = ({ text, query }) => {
     );
 };
 
+// Pages that should only be visible on local/development server
+const DEV_ONLY_PAGE_KEYS = ['modulemaster', 'menumaster', 'iconmaster', 'menuassignmaster', 'platformmaster'];
+
+const isLocalServer = () => {
+    const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+    return host === 'localhost' || host === '127.0.0.1';
+};
+
 const AllMaster = () => {
     const navigate    = useNavigate();
     const location    = useLocation();
@@ -51,21 +59,25 @@ const AllMaster = () => {
     const ALL_MODULES = useMemo(() => {
         const state = getCurrentState();
         const configData = state?.logininfo;
-        
+
         if (!configData || !configData.modules) {
             return [];
         }
+
+        const local = isLocalServer();
 
         return configData.modules.map((module) => ({
             name: module.module,
             icon: module.icon,
             bgcolor: module.bgcolor,
-            masters: module.menus.map((menu) => ({
-                name: menu.menuname,
-                path: `/${menu.aliasname}`,
-                pageKey: menu.aliasname,
-            })),
-        }));
+            masters: module.menus
+                .filter((menu) => local || !DEV_ONLY_PAGE_KEYS.includes(menu.aliasname))
+                .map((menu) => ({
+                    name: menu.menuname,
+                    path: `/${menu.aliasname}`,
+                    pageKey: menu.aliasname,
+                })),
+        })).filter((module) => module.masters.length > 0);
     }, []);
 
     // Check if current path is a master route (not /allmaster)

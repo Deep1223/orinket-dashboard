@@ -17,6 +17,7 @@ import ModalRsuite from '../../components/modalrsuite';
 import DocumentPreviewModal from '../../components/DocumentPreviewModal';
 import { Tooltip, Whisper } from 'rsuite';
 import { TextView, DropdownView, CheckBoxView, ColorPickerView, TextAreaView, DatePickerView, ImageView, RadioView, MultipleImageView } from '../../components';
+import IconPreviewView from '../../components/IconPreviewView';
 
 const TooltipWhisper = ({ children, tooltip }) => (
   <Whisper placement="top" controlId="control-id-hover" trigger="hover" speaker={<Tooltip>{tooltip}</Tooltip>}>
@@ -461,6 +462,12 @@ const GridList = (props) => {
                                   row={row}
                                   field={field}
                                   setPreviewImage={setPreviewImage}
+                                />
+                              )}
+                              {field.type === 'iconpreview' && (
+                                <IconPreviewView 
+                                  row={row}
+                                  field={field}
                                 />
                               )}
                             </td>

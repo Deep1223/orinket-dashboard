@@ -5,7 +5,13 @@ import { useLocation } from 'react-router-dom';
 import IISMethods from '../../utils/IISMethods';
 import { setProps, getCurrentState, getSortData } from '../../utils/reduxUtils';
 import { store } from '../../store/store';
-import { clearFormData, setGridListData, clearPendingProductMasterSearch } from '../../store/reducer';
+import {
+  clearFormData,
+  clearFilterData,
+  clearOldFilterData,
+  setGridListData,
+  clearPendingProductMasterSearch,
+} from '../../store/reducer';
 import MasterView from '../common/MasterView';
 import { useAppSelector } from '../../store/hooks';
 import JsCall from '../../utils/JsCall';
@@ -32,6 +38,10 @@ const MasterController = () => {
 
   useEffect(() => {
     isMounted.current = true;
+
+    // setFilterData merges payloads; {} does not remove keys like searchbar — must replace
+    store.dispatch(clearFilterData());
+    store.dispatch(clearOldFilterData());
 
     // Only initialize if we don't have rightsidebarformdata yet
     // or if we're mounting for the first time
@@ -60,6 +70,8 @@ const MasterController = () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
+      store.dispatch(clearFilterData());
+      store.dispatch(clearOldFilterData());
       // Clear redux keys on unmount to avoid stale data
       setProps({
         data: [],
@@ -551,6 +563,8 @@ const MasterController = () => {
       if (responseData.status === 200) {
         IISMethods.successmsg(Config.dataaddedsuccessfully, 1);
         IISMethods.handleGrid(false, 'rightsidebar', 0);
+
+        setProps({ pageno: 1 });
         getlist();
       } else {
         // Show backend error message if available
@@ -712,7 +726,8 @@ const MasterController = () => {
         IISMethods.successmsg(Config.datadeleted, 1);
         IISMethods.handleGrid(false, 'deletemodal', 0);
         // Clear bulk actions after successful delete
-        setProps({ bulkaction: '', bulkids: [], selectall: false });
+        setProps({ bulkaction: '', bulkids: [], selectall: false, pageno: 1 });
+
         getlist();
       } else {
         IISMethods.errormsg(result.message || Config.dataaddedfailed, 1);

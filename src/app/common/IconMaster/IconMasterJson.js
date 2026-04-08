@@ -25,15 +25,32 @@ const IconMasterJson = [
             },
             {
                 field: 'iconclass',
-                text: 'Icon Class',
-                type: 'text',
+                text: 'Preview',
+                type: 'iconpreview',
                 disabled: false,
-                required: true,
+                required: false,
                 defaultvisibility: true,
                 size: 'col-12',
                 defaultvalue: '',
 
                 showingrid: true,
+                sorting: false,
+                tablesize: 'tbl-w-100p',
+
+                filter: 0,
+                label: 'Preview',
+            },
+            {
+                field: 'iconclass',
+                text: 'Icon Class',
+                type: 'text',
+                disabled: false,
+                required: true,
+                defaultvisibility: false,
+                size: 'col-12',
+                defaultvalue: '',
+
+                showingrid: false,
                 sorting: true,
                 tablesize: 'tbl-w-250p',
 

@@ -1,7 +1,7 @@
 const CmsContactMasterJson = [
     {
         tabname: 'Contact page',
-        pagename: 'Contact Page (storefront)',
+        pagename: 'Contact Page',
         aliasname: 'cmscontact',
         rightsidebarsize: 'lg',
         fields: [
@@ -68,16 +68,16 @@ const CmsContactMasterJson = [
                 size: 'col-12',
                 defaultvalue: '',
             },
-            {
-                field: 'brandDisplayName',
-                text: 'Brand name in heading (optional)',
-                type: 'text',
-                required: false,
-                defaultvisibility: true,
-                size: 'col-12',
-                defaultvalue: '',
-                placeholder: 'Leave blank to use store name from General Settings',
-            },
+            // {
+            //     field: 'brandDisplayName',
+            //     text: 'Brand name in heading (optional)',
+            //     type: 'text',
+            //     required: false,
+            //     defaultvisibility: true,
+            //     size: 'col-12',
+            //     defaultvalue: '',
+            //     placeholder: 'Leave blank to use store name from General Settings',
+            // },
         ],
     },
 ];

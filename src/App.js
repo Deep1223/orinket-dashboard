@@ -19,7 +19,7 @@ import ServerGuard from './components/ServerGuard';
 import { ConfigProvider, useConfig } from './context/ConfigContext';
 import Config from './config/config';
 
-const PageGuard = ({ pageKey, children }) => {
+const PageGuard = ({ children }) => {
     return children;
 };
 

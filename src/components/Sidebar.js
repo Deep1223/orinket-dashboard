@@ -7,6 +7,14 @@ import { BiChevronDown } from 'react-icons/bi';
 import Config from '../config/config';
 import { getCurrentState } from '../utils/reduxUtils';
 
+// Pages that should only be visible on local/development server
+const DEV_ONLY_PAGE_KEYS = ['modulemaster', 'menumaster', 'iconmaster', 'menuassignmaster', 'platformmaster'];
+
+const isLocalServer = () => {
+    const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+    return host === 'localhost' || host === '127.0.0.1';
+};
+
 const Sidebar = ({ isFixed, setIsFixed }) => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
@@ -15,7 +23,17 @@ const Sidebar = ({ isFixed, setIsFixed }) => {
     const reduxModules = useMemo(() => {
         const state = getCurrentState();
         const configData = state?.logininfo;
-        return configData?.modules || [];
+        const modules = configData?.modules || [];
+
+        if (isLocalServer()) return modules;
+
+        // On production, remove dev-only menus and exclude empty modules
+        return modules
+            .map((module) => ({
+                ...module,
+                menus: (module.menus || []).filter((menu) => !DEV_ONLY_PAGE_KEYS.includes(menu.aliasname)),
+            }))
+            .filter((module) => module.menus.length > 0);
     }, []);
 
     // Single expanded accordion section: opening one module closes the others.

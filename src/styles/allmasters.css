@@ -89,9 +89,8 @@
 
 /* ── Modules grid ── */
 .am-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 14px;
+    columns: 4 280px;
+    column-gap: 14px;
     width: 100%;
 }
 
@@ -103,6 +102,10 @@
     overflow: hidden;
     transition: transform 0.18s, box-shadow 0.18s;
     animation: am-fadeUp 0.28s both;
+    break-inside: avoid;
+    margin-bottom: 14px;
+    display: inline-block;
+    width: 100%;
 }
 
 .am-card:hover {
@@ -241,7 +244,7 @@
     .am-page {
         height: calc(100vh - 80px);
     }
-    .am-grid { grid-template-columns: 1fr; }
+    .am-grid { columns: 1; }
     .am-masters-grid { grid-template-columns: 1fr; }
 }
 

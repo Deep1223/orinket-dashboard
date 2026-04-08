@@ -1,7 +1,7 @@
 const CmsReturnsMasterJson = [
     {
         tabname: 'Returns page',
-        pagename: 'Returns & exchanges (storefront)',
+        pagename: 'Returns & exchanges',
         aliasname: 'cmsreturns',
         rightsidebarsize: 'lg',
         fields: [

@@ -30,7 +30,7 @@ const FilterRightSidebar = (props) => {
   };
 
   const handleApplyFilter = () => {
-    setProps({ oldfilterdata: IISMethods.getcopy(getCurrentState().filterdata) });
+    setProps({ oldfilterdata: IISMethods.getcopy(getCurrentState().filterdata), pageno: 1 });
     props.getlist();
     IISMethods.handleGrid(false, 'filterdrawer', 0);
   };

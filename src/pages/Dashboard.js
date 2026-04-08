@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { FiTrendingUp, FiShoppingBag, FiAlertTriangle, FiBarChart2 } from 'react-icons/fi';
+import { FiTrendingUp, FiShoppingBag, FiAlertTriangle, FiBarChart2, FiPackage } from 'react-icons/fi';
 import Config from '../config/config';
+import StorageService from '../utils/StorageService';
+
+function authHeaders() {
+  const headers = { Accept: 'application/json' };
+  const token = StorageService.getToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
 
 const TREND_CHART_HEIGHT = 360;
 const DONUT_CHART_HEIGHT = 400;
@@ -349,6 +357,8 @@ const Dashboard = () => {
   const [sectionsLoading, setSectionsLoading] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
   const [catalogProducts, setCatalogProducts] = useState([]);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [recentOrdersLoading, setRecentOrdersLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -423,6 +433,29 @@ const Dashboard = () => {
       }
     };
     loadCatalogProducts();
+  }, []);
+
+  useEffect(() => {
+    const loadRecentOrders = async () => {
+      setRecentOrdersLoading(true);
+      try {
+        const res = await fetch(`${Config.apiBaseUrl}/ecom/admin/orders?limit=6&page=1`, {
+          credentials: 'include',
+          headers: authHeaders(),
+        });
+        const json = await res.json();
+        if (json?.success && Array.isArray(json.data)) {
+          setRecentOrders(json.data);
+        } else {
+          setRecentOrders([]);
+        }
+      } catch (_err) {
+        setRecentOrders([]);
+      } finally {
+        setRecentOrdersLoading(false);
+      }
+    };
+    loadRecentOrders();
   }, []);
 
   const stockState =
@@ -526,7 +559,11 @@ const Dashboard = () => {
                 </div>
                 <div className="dashboard-kpi-label">Orders</div>
                 <div className="dashboard-kpi-value">{summary.totalOrders}</div>
-                <div className="dashboard-kpi-foot">Auto-calculated from fulfilled orders</div>
+                <div className="dashboard-kpi-foot">
+                  <Link to="/storefront-orders" className="text-decoration-none">
+                    Open order list
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="col-md-4">
@@ -549,6 +586,71 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="col-12">
+          <section className="dashboard-panel">
+            <div className="dashboard-panel-head">
+              <div className="d-flex align-items-start justify-content-between flex-wrap gap-3 w-100">
+                <div className="d-flex align-items-start gap-3">
+                  <div className="dashboard-panel-icon">
+                    <FiPackage size={20} />
+                  </div>
+                  <div>
+                    <h2 className="dashboard-panel-title mb-1">Recent storefront orders</h2>
+                    <p className="dashboard-panel-desc mb-0">Latest orders from the public shop — update status on the orders page.</p>
+                  </div>
+                </div>
+                <Link to="/storefront-orders" className="btn btn-sm btn-outline-primary text-nowrap">
+                  View all orders
+                </Link>
+              </div>
+            </div>
+            {recentOrdersLoading ? (
+              <p className="dashboard-empty mb-0">Loading orders…</p>
+            ) : recentOrders.length === 0 ? (
+              <p className="dashboard-empty mb-0">No storefront orders yet.</p>
+            ) : (
+              <div className="table-responsive">
+                <table className="table table-sm table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">Order</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Customer</th>
+                      <th scope="col">Total</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentOrders.map((o) => {
+                      const id = String(o._id);
+                      const email = o.user?.email || (o.sessionId ? `Guest` : '—');
+                      return (
+                        <tr key={id}>
+                          <td className="font-monospace small">…{id.slice(-8)}</td>
+                          <td className="small text-nowrap">
+                            {o.createdAt ? new Date(o.createdAt).toLocaleString() : '—'}
+                          </td>
+                          <td className="small text-truncate" style={{ maxWidth: 200 }} title={email}>
+                            {email}
+                          </td>
+                          <td className="small fw-semibold">
+                            Rs {Number(o.totalAmount || 0).toLocaleString('en-IN')}
+                          </td>
+                          <td>
+                            <span className="badge rounded-pill bg-light text-dark border text-capitalize">
+                              {o.orderStatus || '—'}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         </div>
 
         <div className="col-12">

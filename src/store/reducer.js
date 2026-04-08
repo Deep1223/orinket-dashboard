@@ -64,6 +64,31 @@ const dataSlice = createSlice({
     clearData: (state) => {
       state.data = []; state.formdata = {}; state.filterdata = {};
     },
+    resetPageState: (state) => {
+      state.data = [];
+      state.formdata = {};
+      state.filterdata = {};
+      state.oldfilterdata = {};
+      state.masterdata = {};
+      state.masterdatalist = {};
+      state.pageno = 1;
+      state.pagename = '';
+      state.nextpage = 0;
+      state.totalcount = 0;
+      state.pagelimit = 20;
+      state.sortdata = { field: 'createdAt', order: -1 };
+      state.rightsidebarformdata = [];
+      state.modal = {};
+      state.error = null;
+      state.loading = {};
+      state.rightSidebarValidationErrors = {};
+      state.firstErrorTabIndex = null;
+      state.bulkaction = '';
+      state.bulkids = [];
+      state.selectall = false;
+      state.lastEditedDataIndex = -1;
+      state.pendingProductMasterSearch = null;
+    },
     clearFormData: (state) => { state.formdata = {}; },
     clearFilterData: (state) => { state.filterdata = {}; },
     clearOldFilterData: (state) => { state.oldfilterdata = {}; },
@@ -107,6 +132,7 @@ export const {
   setBulkAction, setBulkIds, setSelectAll, setLastEditedDataIndex,
   setEditeDataIndex, setGridListData,
   setPendingProductMasterSearch, clearPendingProductMasterSearch,
+  resetPageState,
 } = dataSlice.actions;
 
 export default rootReducer;

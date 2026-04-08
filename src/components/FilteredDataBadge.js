@@ -14,7 +14,7 @@ const FilteredDataBadge = (props) => {
     const filterData = { ...currentState.filterdata };
     filterData[item.field] = '';
     setProps({ filterdata: IISMethods.getcopy(filterData) });
-    setProps({ oldfilterdata: IISMethods.getcopy(filterData) });
+    setProps({ oldfilterdata: IISMethods.getcopy(filterData), pageno: 1 });
     props.getlist();
   };
 

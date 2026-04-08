@@ -1,7 +1,7 @@
 const CmsShippingMasterJson = [
     {
         tabname: 'Shipping page',
-        pagename: 'Shipping information (storefront)',
+        pagename: 'Shipping information',
         aliasname: 'cmsshipping',
         rightsidebarsize: 'lg',
         fields: [

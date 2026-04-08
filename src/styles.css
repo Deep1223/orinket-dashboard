@@ -1126,11 +1126,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Canvas behind routed pages: grey stays in the scrollport; content scrolls over it */
-.app-main-scroll {
-    background-color: #f8f9fa;
-}
-
 /* Fix main content positioning */
 .main-content-wrapper {
     min-height: 100vh;

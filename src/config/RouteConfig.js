@@ -19,6 +19,7 @@ import SeriesAssignMaster from '../app/common/SeriesAssignMaster/SeriesAssignMas
 import ProductMaster from '../app/common/ProductMaster/ProductMaster';
 import LowStockThresholdMasterPage from '../pages/LowStockThresholdMasterPage';
 import LowStockProductsMasterPage from '../pages/LowStockProductsMasterPage';
+import EcomOrdersPage from '../pages/EcomOrdersPage';
 import SubCategoryMaster from '../app/common/SubCategoryMaster/SubCategoryMaster';
 import OccasionMaster from '../app/common/OccasionMaster/OccasionMaster';
 import GeneralSetting from '../app/common/GeneralSetting/GeneralSetting';
@@ -36,6 +37,7 @@ import StorefrontShopWithConfidenceMaster from '../app/common/StorefrontShopWith
 import StorefrontBrandStoryMaster from '../app/common/StorefrontBrandStoryMaster/StorefrontBrandStoryMaster';
 import StorefrontReviewsMaster from '../app/common/StorefrontReviewsMaster/StorefrontReviewsMaster';
 import SpinLogMaster from '../app/common/SpinLogMaster/SpinLogMaster';
+import UserLoginsMasterPage from '../pages/UserLoginsMasterPage';
 import StorefrontCtaBannerMaster from '../app/common/StorefrontCtaBannerMaster/StorefrontCtaBannerMaster';
 import StorefrontVisitStoresMaster from '../app/common/StorefrontVisitStoresMaster/StorefrontVisitStoresMaster';
 import CmsContactMaster from '../app/common/CmsSupport/CmsContactMaster';
@@ -74,6 +76,7 @@ const COMPONENT_BY_PATH = {
     '/productmaster': ProductMaster,
     '/low-stock-threshold-master': LowStockThresholdMasterPage,
     '/low-stock-products-master': LowStockProductsMasterPage,
+    '/storefront-orders': EcomOrdersPage,
     '/subcategorymaster': SubCategoryMaster,
     '/occasionmaster': OccasionMaster,
     '/generalsetting': GeneralSetting,
@@ -91,6 +94,7 @@ const COMPONENT_BY_PATH = {
     '/brand-story-master': StorefrontBrandStoryMaster,
     '/reviews-master': StorefrontReviewsMaster,
     '/spinlogmaster': SpinLogMaster,
+    '/user-logins': UserLoginsMasterPage,
     '/cta-banner-master': StorefrontCtaBannerMaster,
     '/visit-stores-master': StorefrontVisitStoresMaster,
     '/cmscontact': CmsContactMaster,
