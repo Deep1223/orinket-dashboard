@@ -23,6 +23,7 @@
 @import "./styles/loader.css";
 @import "./styles/landing.css";
 @import "./styles/utils/common-style.css";
+@import "./styles/utils/badge-ui.css";
 @import "./styles/ColorPickerRsuite.css";
 
 /* TwoFA Modal Styles */
@@ -1598,7 +1599,7 @@ aside .border-bottom.border-dark {
 /* Button Styles */
 .btn {
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: 500;
     border: none;

@@ -145,25 +145,30 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 0.2rem 0.45rem;
-    border-radius: 5px;
+    padding: 0.3rem 0.55rem;
+    border-radius: 9999px;
+    border: 1px solid transparent;
 }
 
 .ws-cat-signin {
     background: #dcfce7;
-    color: #166534;
+    color: #15803d;
+    border-color: #bbf7d0;
 }
 .ws-cat-settings {
-    background: #dbeafe;
-    color: #1d4ed8;
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #bae6fd;
 }
 .ws-cat-security {
-    background: #ffedd5;
-    color: #c2410c;
+    background: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
 }
 .ws-cat-data {
     background: #f1f5f9;
     color: #475569;
+    border-color: #e2e8f0;
 }
 
 .ws-activity-time {

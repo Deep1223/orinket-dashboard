@@ -349,7 +349,7 @@ const ProductMasterJson = [
                 text: 'Weight',
                 type: 'text',
                 disabled: false,
-                required: false,
+                required: true,
                 defaultvisibility: true,
                 size: 'col-12 col-md-6',
                 placeholder: 'Enter Weight (e.g. 250g)',

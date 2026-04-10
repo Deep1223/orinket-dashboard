@@ -1,0 +1,156 @@
+/**
+ * Project-wide badge look: soft fills, readable text, 1px border, full pill.
+ * Complements Bootstrap .badge.bg-* and legacy .badge.badge-* (color.css).
+ */
+
+/* Core: full pill + content centered (overrides Bootstrap display/align) */
+.badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    border-radius: 9999px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    padding: 8px 12px !important;
+}
+
+/* ── Bootstrap contextual (solid → soft) ───────────────────────────── */
+.badge.bg-primary {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+    border: 1px solid #bae6fd !important;
+}
+
+.badge.bg-secondary {
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.badge.bg-success {
+    background-color: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #bbf7d0 !important;
+}
+
+.badge.bg-danger {
+    background-color: #fee2e2 !important;
+    color: #b91c1c !important;
+    border: 1px solid #fecaca !important;
+}
+
+.badge.bg-warning,
+.badge.bg-warning.text-dark {
+    background-color: #fef3c7 !important;
+    color: #b45309 !important;
+    border: 1px solid #fde68a !important;
+}
+
+.badge.bg-info {
+    background-color: #ecfeff !important;
+    color: #0e7490 !important;
+    border: 1px solid #a5f3fc !important;
+}
+
+.badge.bg-dark {
+    background-color: #f1f5f9 !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.badge.bg-light.text-dark {
+    background-color: #f8fafc !important;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Muted chips (filters, meta) */
+.badge.bg-dark.bg-opacity-10.text-dark {
+    background-color: rgba(15, 23, 42, 0.06) !important;
+    color: #475569 !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+
+.badge.bg-primary.bg-opacity-10.text-primary {
+    background-color: rgba(14, 165, 233, 0.1) !important;
+    color: #0369a1 !important;
+    border: 1px solid rgba(14, 165, 233, 0.22) !important;
+}
+
+.badge.bg-secondary.bg-opacity-10.text-secondary {
+    background-color: rgba(100, 116, 139, 0.08) !important;
+    color: #475569 !important;
+    border: 1px solid rgba(100, 116, 139, 0.18) !important;
+}
+
+/* ── Legacy double-class badges (.badge.badge-primary) ───────────────── */
+.badge.badge-primary {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+    border: 1px solid #bae6fd !important;
+}
+
+.badge.badge-success {
+    background-color: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #bbf7d0 !important;
+}
+
+.badge.badge-danger {
+    background-color: #fee2e2 !important;
+    color: #b91c1c !important;
+    border: 1px solid #fecaca !important;
+}
+
+.badge.badge-warning {
+    background-color: #fef3c7 !important;
+    color: #b45309 !important;
+    border: 1px solid #fde68a !important;
+}
+
+.badge.badge-secondary {
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.badge.badge-info {
+    background-color: #ecfeff !important;
+    color: #0e7490 !important;
+    border: 1px solid #a5f3fc !important;
+}
+
+/* ── Filter / tab pills (NavLink row) ────────────────────────────────── */
+.ork-filter-pill {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.25;
+    border-width: 1px !important;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.ork-filter-pill--inactive {
+    background-color: #fff !important;
+    color: #475569 !important;
+    border-color: #e2e8f0 !important;
+}
+
+.ork-filter-pill--inactive:hover {
+    background-color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #334155 !important;
+}
+
+.ork-filter-pill--active {
+    background-color: #334155 !important;
+    color: #fff !important;
+    border-color: #334155 !important;
+    font-weight: 600;
+}
+
+.ork-filter-pill--active:hover {
+    background-color: #1e293b !important;
+    border-color: #1e293b !important;
+    color: #fff !important;
+}

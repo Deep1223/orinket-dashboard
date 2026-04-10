@@ -2,15 +2,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 10px;
-    height: 24px;
-    border-radius: 6px;
+    text-align: center;
+    padding: 0.35rem 0.875rem;
+    min-height: 1.5rem;
+    height: auto;
+    border-radius: 9999px;
     font-size: 12px;
-    font-weight: 500 !important;
-    line-height: normal;
+    font-weight: 600 !important;
+    line-height: 1.25;
     white-space: nowrap;
-    width: unset;
-    gap: 4px;
+    width: max-content;
+    max-width: 100%;
+    gap: 0.35rem;
+    box-sizing: border-box;
 }
 
 
