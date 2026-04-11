@@ -21,6 +21,8 @@ import LowStockThresholdMasterPage from '../pages/LowStockThresholdMasterPage';
 import LowStockProductsMasterPage from '../pages/LowStockProductsMasterPage';
 import EcomOrdersPage from '../pages/EcomOrdersPage';
 import OrderManagementPage from '../pages/OrderManagementPage';
+import ShippingCenterPage from '../pages/ShippingCenterPage';
+import ReturnRefundCenterPage from '../pages/ReturnRefundCenterPage';
 import SubCategoryMaster from '../app/common/SubCategoryMaster/SubCategoryMaster';
 import OccasionMaster from '../app/common/OccasionMaster/OccasionMaster';
 import GeneralSetting from '../app/common/GeneralSetting/GeneralSetting';
@@ -79,6 +81,8 @@ const COMPONENT_BY_PATH = {
     '/low-stock-products-master': LowStockProductsMasterPage,
     '/storefront-orders': EcomOrdersPage,
     '/order-management/*': OrderManagementPage,
+    '/shipping-center': ShippingCenterPage,
+    '/return-refund-center': ReturnRefundCenterPage,
     '/subcategorymaster': SubCategoryMaster,
     '/occasionmaster': OccasionMaster,
     '/generalsetting': GeneralSetting,

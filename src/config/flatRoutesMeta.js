@@ -41,6 +41,18 @@ export const FLAT_ROUTES_META = [
         label: 'Order management',
         showInSidebar: true,
     },
+    {
+        path: '/shipping-center',
+        pageKey: 'shippingcenter',
+        label: 'Shipping Center',
+        showInSidebar: true,
+    },
+    {
+        path: '/return-refund-center',
+        pageKey: 'returnrefundcenter',
+        label: 'Return & Refund Center',
+        showInSidebar: true,
+    },
     { path: '/subcategorymaster', pageKey: 'subcategorymaster', label: 'Sub Category Master', showInSidebar: true },
     { path: '/occasionmaster', pageKey: 'occasionmaster', label: 'Occasion Master', showInSidebar: true },
     { path: '/generalsetting', pageKey: 'generalsetting', label: 'General Settings', showInSidebar: true },
